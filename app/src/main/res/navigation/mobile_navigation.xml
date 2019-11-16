@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/nav_shopping_lists"
-        android:name="com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListFragment"
+        android:name="com.philipgurr.smartshoppinglist.ui.fragments.ShoppingListFragment"
         android:label="@string/menu_my_lists"
         tools:layout="@layout/fragment_my_lists" />
 
     <fragment
         android:id="@+id/nav_completed_shopping_lists"
-        android:name="com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListFragment"
+        android:name="com.philipgurr.smartshoppinglist.ui.fragments.CompletedShoppingListFragment"
         android:label="@string/menu_completed_lists"
         tools:layout="@layout/fragment_completed_list" />
 </navigation>

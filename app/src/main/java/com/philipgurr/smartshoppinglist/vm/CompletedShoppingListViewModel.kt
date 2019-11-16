@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.completedshoppinglist
+package com.philipgurr.smartshoppinglist.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

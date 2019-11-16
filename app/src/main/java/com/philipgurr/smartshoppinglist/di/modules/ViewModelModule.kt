@@ -2,8 +2,8 @@ package com.philipgurr.smartshoppinglist.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListViewModel
-import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListViewModel
+import com.philipgurr.smartshoppinglist.vm.CompletedShoppingListViewModel
+import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
 import com.philipgurr.smartshoppinglist.util.ViewModelFactory
 import dagger.Binds
 import dagger.Module
