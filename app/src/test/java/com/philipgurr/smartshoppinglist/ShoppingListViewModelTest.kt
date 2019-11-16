@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
+import com.philipgurr.smartshoppinglist.domain.usecases.GetShoppingListsUseCase
 import com.philipgurr.smartshoppinglist.repository.Repository
 import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
 import org.junit.Assert.assertEquals
@@ -18,6 +19,7 @@ class ShoppingListViewModelTest {
     val instantTaskRule = InstantTaskExecutorRule()
 
     private val repository: Repository<ShoppingList> = mock()
+    private val shoppingListsUseCase = GetShoppingListsUseCase(repository)
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)
@@ -33,7 +35,7 @@ class ShoppingListViewModelTest {
 
     @Test
     fun testShoppingViewModel() {
-        val viewModel = ShoppingListViewModel(repository)
+        val viewModel = ShoppingListViewModel(shoppingListsUseCase)
         viewModel.loadShoppingLists()
         assertEquals(listOf(testShoppingList), viewModel.shoppingList.value)
     }
