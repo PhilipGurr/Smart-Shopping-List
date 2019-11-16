@@ -28,8 +28,8 @@ class ShoppingListFragment : DaggerFragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_my_lists, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        viewModel.text.observe(this, Observer {
-            textView.text = it
+        viewModel.shoppingList.observe(this, Observer {
+            textView.text = "Sample text"
         })
 
         return root

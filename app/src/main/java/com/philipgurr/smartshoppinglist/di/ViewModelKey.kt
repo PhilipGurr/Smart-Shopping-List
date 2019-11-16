@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.di.modules
+package com.philipgurr.smartshoppinglist.di
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey
