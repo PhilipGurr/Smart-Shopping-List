@@ -2,6 +2,7 @@ package com.philipgurr.smartshoppinglist.di
 
 import com.philipgurr.smartshoppinglist.App
 import com.philipgurr.smartshoppinglist.di.modules.AndroidModule
+import com.philipgurr.smartshoppinglist.di.modules.RepositoryModule
 import com.philipgurr.smartshoppinglist.di.modules.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
@@ -12,7 +13,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AndroidSupportInjectionModule::class,
-    AndroidModule::class
+    AndroidModule::class,
+    RepositoryModule::class
 ])
 interface ApplicationComponent : AndroidInjector<App> {
     @Component.Factory
