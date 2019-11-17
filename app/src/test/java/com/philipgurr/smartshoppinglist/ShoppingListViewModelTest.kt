@@ -8,6 +8,10 @@ import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.domain.usecases.GetShoppingListsUseCase
 import com.philipgurr.smartshoppinglist.repository.Repository
 import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -30,11 +34,13 @@ class ShoppingListViewModelTest {
 
     @Before
     fun before() {
-        whenever(repository.getAll()).thenReturn(listOf(testShoppingList))
+        Dispatchers.setMain(TestCoroutineDispatcher())
     }
 
     @Test
-    fun testShoppingViewModel() {
+    fun testShoppingViewModel() = runBlocking(Dispatchers.Main) {
+        whenever(repository.getAll()).thenReturn(listOf(testShoppingList))
+
         val viewModel = ShoppingListViewModel(shoppingListsUseCase)
         viewModel.loadShoppingLists()
         assertEquals(listOf(testShoppingList), viewModel.shoppingList.value)
