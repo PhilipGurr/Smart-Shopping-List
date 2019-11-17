@@ -43,6 +43,6 @@ class ShoppingListViewModelTest {
 
         val viewModel = ShoppingListViewModel(shoppingListsUseCase)
         viewModel.loadShoppingLists()
-        assertEquals(listOf(testShoppingList), viewModel.shoppingList.value)
+        assertEquals(listOf(testShoppingList), viewModel.shoppingLists.value)
     }
 }
