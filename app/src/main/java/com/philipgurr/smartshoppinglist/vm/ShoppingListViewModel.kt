@@ -16,7 +16,7 @@ class ShoppingListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _text = MutableLiveData<List<ShoppingList>>()
-    val shoppingList: LiveData<List<ShoppingList>> = _text
+    val shoppingLists: LiveData<List<ShoppingList>> = _text
 
     fun loadShoppingLists() {
         viewModelScope.launch {
