@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetShoppingListsUseCase @Inject constructor(
     private val repository: Repository<ShoppingList>) {
 
-    fun getShoppingLists() = repository.getAll()
+    suspend fun getShoppingLists() = repository.getAll()
 }
