@@ -1,8 +1,9 @@
 package com.philipgurr.smartshoppinglist.domain
 
 class ShoppingList(
+    var id: String = "",
     val name: String = "",
-    val products: List<Product> = listOf()
+    var products: List<Product> = listOf()
 ) {
     fun getCompletedProducts() = products.filter { it.isCompleted }
 }
