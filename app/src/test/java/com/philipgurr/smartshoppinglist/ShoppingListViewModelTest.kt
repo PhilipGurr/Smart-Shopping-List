@@ -18,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class ShoppingListViewModelTest {
-
     @get:Rule
     val instantTaskRule = InstantTaskExecutorRule()
 
@@ -29,6 +28,7 @@ class ShoppingListViewModelTest {
     private val testProduct2 = Product("Strawberry Jam", true)
     private val testShoppingList = ShoppingList(
         "testShoppingList",
+        "Test Shopping List",
         listOf(testProduct, testProduct2)
     )
 

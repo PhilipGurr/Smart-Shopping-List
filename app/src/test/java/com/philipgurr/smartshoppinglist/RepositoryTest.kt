@@ -11,13 +11,13 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class RepositoryTest {
-
-    val datasource: Datasource<ShoppingList> = mock()
+    private val datasource: Datasource<ShoppingList> = mock()
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)
     private val testShoppingList = ShoppingList(
         "testShoppingList",
+        "Test Shopping List",
         listOf(testProduct, testProduct2)
     )
 
