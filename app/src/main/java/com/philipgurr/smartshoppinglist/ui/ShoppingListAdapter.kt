@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.philipgurr.smartshoppinglist.R
 import kotlinx.android.synthetic.main.recyclerview_item.view.*
 
-class ShoppingListAdapter() : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
-
+class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
     var data = listOf<ShoppingListUI>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -43,6 +42,7 @@ class ShoppingListAdapter() : RecyclerView.Adapter<ShoppingListAdapter.ItemViewH
         private fun View.setProgress(shoppingListUI: ShoppingListUI) {
             shoppingListProgressBar.max = shoppingListUI.totalProducts
             shoppingListProgressBar.progress = shoppingListUI.progress
+            TODO("Set progressbar color")
         }
     }
 }
