@@ -29,20 +29,20 @@ class ShoppingListAdapter() : RecyclerView.Adapter<ShoppingListAdapter.ItemViewH
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(shoppingListUI: ShoppingListUI) {
-            with(shoppingListUI) {
-                setText()
-                setProgress()
+            with(view) {
+                setText(shoppingListUI)
+                setProgress(shoppingListUI)
             }
         }
 
-        private fun ShoppingListUI.setText() {
-            view.shoppingListName.text = name
-            view.shoppingListProgress.text = "${progress}/${totalProducts}"
+        private fun View.setText(shoppingListUI: ShoppingListUI) {
+            shoppingListName.text = shoppingListUI.name
+            shoppingListProgress.text = "${shoppingListUI.progress}/${shoppingListUI.totalProducts}"
         }
 
-        private fun ShoppingListUI.setProgress() {
-            view.shoppingListProgressBar.max = totalProducts
-            view.shoppingListProgressBar.progress = progress
+        private fun View.setProgress(shoppingListUI: ShoppingListUI) {
+            shoppingListProgressBar.max = shoppingListUI.totalProducts
+            shoppingListProgressBar.progress = shoppingListUI.progress
         }
     }
 }
