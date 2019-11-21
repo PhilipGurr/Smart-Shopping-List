@@ -13,13 +13,13 @@ class ShoppingListRepository @Inject constructor(
         return datasource.get(name)
     }
 
-        override suspend fun getAll() = datasource.getAll()
+    override suspend fun getAll() = datasource.getAll()
 
-        override suspend fun add(value: ShoppingList) {
-            datasource.insert(value)
-        }
-
-        override suspend fun addAll(values: List<ShoppingList>) {
-            datasource.insertAll(values)
-        }
+    override suspend fun add(value: ShoppingList) {
+        datasource.insert(value)
     }
+
+    override suspend fun addAll(values: List<ShoppingList>) {
+        datasource.insertAll(values)
+    }
+}
