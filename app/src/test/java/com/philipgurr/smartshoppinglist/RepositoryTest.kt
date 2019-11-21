@@ -6,12 +6,13 @@ import com.philipgurr.smartshoppinglist.datasource.Datasource
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class RepositoryTest {
     private val datasource: Datasource<ShoppingList> = mock()
+    private val repository = ShoppingListRepository(datasource)
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)
@@ -25,9 +26,7 @@ class RepositoryTest {
     fun testShoppingListRepositoryGetAll() = runBlocking {
         whenever(datasource.getAll()).thenReturn(listOf(testShoppingList))
 
-        val repository = ShoppingListRepository(datasource)
         val actualShoppingLists = repository.getAll()
-
         assertEquals(listOf(testShoppingList), actualShoppingLists)
     }
 
@@ -35,9 +34,14 @@ class RepositoryTest {
     fun testShoppingListRepositoryGetSingle() = runBlocking {
         whenever(datasource.get("Test Shopping List")).thenReturn(testShoppingList)
 
-        val repository = ShoppingListRepository(datasource)
         val actualShoppingList = repository.get("Test Shopping List")
-
         assertEquals(testShoppingList, actualShoppingList)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun testShoppingListRepositoryWithEmptyName() {
+        runBlocking {
+            repository.get("")
+        }
     }
 }
