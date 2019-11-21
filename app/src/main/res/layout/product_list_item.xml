@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9"
+        android:text="Placeholder"
+        android:textSize="30sp"
+        android:textColor="@color/black" />
+
+    <CheckBox
+        android:id="@+id/completedCheckBox"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1" />
+</LinearLayout>
