@@ -1,7 +1,6 @@
 package com.philipgurr.smartshoppinglist.datasource
 
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.extensions.await
@@ -12,8 +11,9 @@ private const val USER_LISTS_COLLECTION_ID = "user"
 private const val SHOPPING_LISTS_COLLECTION_ID = "shoppinglists"
 private const val PRODUCT_LISTS_COLLECTION_ID = "products"
 
-class FirebaseCloudDatasource @Inject constructor() : Datasource<ShoppingList> {
-    private val database = Firebase.firestore
+class FirebaseCloudDatasource @Inject constructor(
+    database: FirebaseFirestore
+) : Datasource<ShoppingList> {
     private val shoppingListCollection = database
         .collection(USER_LISTS_COLLECTION_ID)
         .document("test")

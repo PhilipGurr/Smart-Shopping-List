@@ -2,19 +2,17 @@ package com.philipgurr.smartshoppinglist.ui.fragments
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.ui.ProductListAdapter
 import com.philipgurr.smartshoppinglist.ui.ShoppingListToUIMapper
 import com.philipgurr.smartshoppinglist.ui.ShoppingListUI
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
-import kotlinx.android.synthetic.main.recyclerview_item.*
 
 /**
  * A simple [Fragment] subclass.
@@ -48,13 +46,13 @@ class ShoppingListDetailFragment : Fragment() {
     }
 
     private fun setupHeader() = with(shoppingListUi) {
-            shoppingListNameDetail.text = name
-            shoppingListProgressDetail.text = "${progress}/${totalProducts}"
+        shoppingListNameDetail.text = name
+        shoppingListProgressDetail.text = "${progress}/${totalProducts}"
 
-            shoppingListProgressBarDetail.max = totalProducts
-            shoppingListProgressBarDetail.progress = progress
-            // TODO: "Set progressbar color"
-        }
+        shoppingListProgressBarDetail.max = totalProducts
+        shoppingListProgressBarDetail.progress = progress
+        // TODO: "Set progressbar color"
+    }
 
     private fun setupRecyclerView() {
         linearLayoutManager = LinearLayoutManager(context)

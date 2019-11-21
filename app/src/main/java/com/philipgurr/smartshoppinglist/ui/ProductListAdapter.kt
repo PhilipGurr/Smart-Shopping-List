@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.domain.Product
 import kotlinx.android.synthetic.main.product_list_item.view.*
-import kotlinx.android.synthetic.main.recyclerview_item.view.*
 
 class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ItemViewHolder>() {
 

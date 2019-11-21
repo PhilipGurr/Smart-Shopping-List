@@ -5,7 +5,8 @@ import com.philipgurr.smartshoppinglist.repository.Repository
 import javax.inject.Inject
 
 class GetShoppingListsUseCase @Inject constructor(
-    private val repository: Repository<ShoppingList>) {
+    private val repository: Repository<ShoppingList>
+) {
 
     suspend fun getShoppingLists() = repository.getAll()
 }

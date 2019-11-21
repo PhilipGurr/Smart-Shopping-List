@@ -1,6 +1,5 @@
 package com.philipgurr.smartshoppinglist.ui
 
-import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.Mapper
 import com.philipgurr.smartshoppinglist.util.ProgressBarColorPicker
@@ -15,6 +14,6 @@ class ShoppingListToUIMapper : Mapper<ShoppingList, ShoppingListUI> {
             getCompletedProducts().size,
             products.size,
             color
-            )
+        )
     }
 }
