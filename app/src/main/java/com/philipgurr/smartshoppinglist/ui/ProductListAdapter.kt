@@ -7,14 +7,14 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.domain.Product
-import kotlinx.android.synthetic.main.product_list_item.view.*
+import kotlinx.android.synthetic.main.productlist_item.view.*
 
 class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ItemViewHolder>() {
 
     var data = listOf<Product>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = parent.inflate(R.layout.product_list_item)
+        val view = parent.inflate(R.layout.productlist_item)
         return ItemViewHolder(view)
     }
 
