@@ -6,17 +6,20 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.philipgurr.smartshoppinglist.R
+import com.philipgurr.smartshoppinglist.databinding.ShoppinglistItemBinding
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.ui.fragments.ShoppingListFragmentDirections
-import kotlinx.android.synthetic.main.recyclerview_item.view.*
+import kotlinx.android.synthetic.main.shoppinglist_item.view.*
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
     var data = listOf<ShoppingList>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = parent.inflate(R.layout.recyclerview_item)
-        return ItemViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ShoppinglistItemBinding.inflate(inflater, parent, false)
+        val viewHolder = ItemViewHolder(binding)
+        binding.viewHolder = viewHolder
+        return viewHolder
     }
 
     override fun getItemCount() = data.size
@@ -28,18 +31,21 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHol
     private fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false) =
         LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
-    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(private val binding: ShoppinglistItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val mapper = ShoppingListToUIMapper()
 
         fun bind(shoppingList: ShoppingList) {
             val shoppingListUI = mapper.map(shoppingList)
-            with(view) {
+            binding.shoppingList = shoppingList
+            binding.shoppingListUI = shoppingListUI
+            binding.executePendingBindings()
+            /*with(view) {
                 setText(shoppingListUI)
                 setProgress(shoppingListUI)
                 setOnClickListener {
                     navigateToDetailScreen(shoppingList)
                 }
-            }
+            }*/
         }
 
         private fun View.setText(shoppingListUI: ShoppingListUI) {
@@ -53,9 +59,9 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHol
             // TODO: Set progressbar color
         }
 
-        private fun navigateToDetailScreen(shoppingList: ShoppingList) {
+        fun navigateToDetailScreen(shoppingList: ShoppingList) {
             val actionDetail = ShoppingListFragmentDirections.actionShoppingListDetail(shoppingList)
-            Navigation.findNavController(view).navigate(actionDetail)
+            Navigation.findNavController(binding.root).navigate(actionDetail)
         }
     }
 }
