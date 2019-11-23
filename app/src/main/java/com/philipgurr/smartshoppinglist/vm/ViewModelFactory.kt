@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.util
+package com.philipgurr.smartshoppinglist.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,9 +15,10 @@ constructor(private val viewModels: MutableMap<Class<out ViewModel>, Provider<Vi
             ?: viewModels.asIterable().firstOrNull { modelClass.isAssignableFrom(it.key) }?.value
             ?: throw IllegalArgumentException("unknown model class $modelClass")
         return try {
+            @Suppress("UNCHECKED_CAST")
             creator.get() as T
-        } catch (e: Exception) {
-            throw RuntimeException(e)
+        } catch (e: ClassCastException) {
+            throw e
         }
     }
 }

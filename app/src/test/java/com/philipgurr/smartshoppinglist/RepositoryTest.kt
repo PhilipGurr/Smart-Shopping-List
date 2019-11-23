@@ -9,6 +9,9 @@ import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.*
+
+private const val SHOPPING_LIST_NAME = "Test Shopping List"
 
 class RepositoryTest {
     private val datasource: Datasource<ShoppingList> = mock()
@@ -18,7 +21,8 @@ class RepositoryTest {
     private val testProduct2 = Product("Strawberry Jam", true)
     private val testShoppingList = ShoppingList(
         "testShoppingList",
-        "Test Shopping List",
+        SHOPPING_LIST_NAME,
+        Date(),
         listOf(testProduct, testProduct2)
     )
 
@@ -32,9 +36,9 @@ class RepositoryTest {
 
     @Test
     fun testShoppingListRepositoryGetSingle() = runBlocking {
-        whenever(datasource.get("Test Shopping List")).thenReturn(testShoppingList)
+        whenever(datasource.get(SHOPPING_LIST_NAME)).thenReturn(testShoppingList)
 
-        val actualShoppingList = repository.get("Test Shopping List")
+        val actualShoppingList = repository.get(SHOPPING_LIST_NAME)
         assertEquals(testShoppingList, actualShoppingList)
     }
 
