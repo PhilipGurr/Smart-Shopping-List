@@ -28,9 +28,6 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHol
         holderItem.bind(data[position])
     }
 
-    private fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false) =
-        LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-
     class ItemViewHolder(private val binding: ShoppinglistItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val mapper = ShoppingListToUIMapper()
 
@@ -39,24 +36,6 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHol
             binding.shoppingList = shoppingList
             binding.shoppingListUI = shoppingListUI
             binding.executePendingBindings()
-            /*with(view) {
-                setText(shoppingListUI)
-                setProgress(shoppingListUI)
-                setOnClickListener {
-                    navigateToDetailScreen(shoppingList)
-                }
-            }*/
-        }
-
-        private fun View.setText(shoppingListUI: ShoppingListUI) {
-            shoppingListName.text = shoppingListUI.name
-            shoppingListProgress.text = "${shoppingListUI.progress}/${shoppingListUI.totalProducts}"
-        }
-
-        private fun View.setProgress(shoppingListUI: ShoppingListUI) {
-            shoppingListProgressBar.max = shoppingListUI.totalProducts
-            shoppingListProgressBar.progress = shoppingListUI.progress
-            // TODO: Set progressbar color
         }
 
         fun navigateToDetailScreen(shoppingList: ShoppingList) {
