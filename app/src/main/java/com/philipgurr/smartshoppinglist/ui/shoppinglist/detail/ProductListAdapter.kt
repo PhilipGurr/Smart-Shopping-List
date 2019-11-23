@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui
+package com.philipgurr.smartshoppinglist.ui.shoppinglist.detail
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,9 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ItemViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = parent.inflate(R.layout.productlist_item)
-        return ItemViewHolder(view)
+        return ItemViewHolder(
+            view
+        )
     }
 
     override fun getItemCount() = data.size

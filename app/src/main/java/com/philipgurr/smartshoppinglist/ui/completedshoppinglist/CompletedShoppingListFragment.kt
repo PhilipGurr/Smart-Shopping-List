@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.fragments
+package com.philipgurr.smartshoppinglist.ui.completedshoppinglist
 
 import android.os.Bundle
 import android.view.LayoutInflater

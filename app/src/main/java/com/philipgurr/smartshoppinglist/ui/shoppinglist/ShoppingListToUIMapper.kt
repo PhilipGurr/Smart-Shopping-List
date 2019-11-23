@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui
+package com.philipgurr.smartshoppinglist.ui.shoppinglist
 
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.Mapper

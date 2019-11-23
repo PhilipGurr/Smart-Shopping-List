@@ -1,7 +1,6 @@
-package com.philipgurr.smartshoppinglist.ui.fragments
+package com.philipgurr.smartshoppinglist.ui.shoppinglist.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.ui.ShoppingListAdapter
 import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
@@ -25,7 +22,8 @@ class ShoppingListFragment : DaggerFragment() {
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private val shoppingListAdapter = ShoppingListAdapter()
+    private val shoppingListAdapter =
+        ShoppingListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

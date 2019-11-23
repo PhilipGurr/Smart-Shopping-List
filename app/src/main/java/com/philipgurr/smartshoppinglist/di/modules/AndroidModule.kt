@@ -1,7 +1,7 @@
 package com.philipgurr.smartshoppinglist.di.modules
 
-import com.philipgurr.smartshoppinglist.ui.fragments.CompletedShoppingListFragment
-import com.philipgurr.smartshoppinglist.ui.fragments.ShoppingListFragment
+import com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListFragment
+import com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

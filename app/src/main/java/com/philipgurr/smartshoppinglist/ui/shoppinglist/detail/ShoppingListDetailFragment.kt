@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.fragments
+package com.philipgurr.smartshoppinglist.ui.shoppinglist.detail
 
 
 import android.os.Bundle
@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.ui.ProductListAdapter
-import com.philipgurr.smartshoppinglist.ui.ShoppingListToUIMapper
-import com.philipgurr.smartshoppinglist.ui.ShoppingListUI
+import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListToUIMapper
+import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI
+import com.philipgurr.smartshoppinglist.ui.fragments.ShoppingListDetailFragmentArgs
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
 
 /**
@@ -19,8 +19,10 @@ import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
  */
 class ShoppingListDetailFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private val productListAdapter = ProductListAdapter()
-    private val mapper = ShoppingListToUIMapper()
+    private val productListAdapter =
+        ProductListAdapter()
+    private val mapper =
+        ShoppingListToUIMapper()
     private lateinit var shoppingList: ShoppingList
     private lateinit var shoppingListUi: ShoppingListUI
 
@@ -30,7 +32,10 @@ class ShoppingListDetailFragment : Fragment() {
     ): View? {
 
         arguments?.let {
-            val safeArgs = ShoppingListDetailFragmentArgs.fromBundle(it)
+            val safeArgs =
+                ShoppingListDetailFragmentArgs.fromBundle(
+                    it
+                )
             shoppingList = safeArgs.shoppingList
             shoppingListUi = mapper.map(shoppingList)
         }
