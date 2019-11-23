@@ -1,10 +1,13 @@
 package com.philipgurr.smartshoppinglist.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import javax.inject.Inject
 import javax.inject.Provider
+
+private const val TAG = "ViewModelFactory"
 
 class ViewModelFactory @Inject
 constructor(private val viewModels: MutableMap<Class<out ViewModel>, Provider<ViewModel>>) :
@@ -18,6 +21,7 @@ constructor(private val viewModels: MutableMap<Class<out ViewModel>, Provider<Vi
             @Suppress("UNCHECKED_CAST")
             creator.get() as T
         } catch (e: ClassCastException) {
+            Log.d(TAG, e.message!!)
             throw e
         }
     }
