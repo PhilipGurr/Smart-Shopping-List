@@ -7,5 +7,5 @@ class ShoppingList(
     val name: String = "",
     var products: List<Product> = listOf()
 ) : Serializable {
-    fun getCompletedProducts() = products.filter { it.isCompleted }
+    fun getCompletedProducts() = products.filter { it.completed }
 }

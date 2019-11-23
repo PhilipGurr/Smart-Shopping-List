@@ -32,7 +32,7 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ItemViewHolde
         fun bind(product: Product) {
             with(view) {
                 productName.text = product.name
-                completedCheckBox.isChecked = product.isCompleted
+                completedCheckBox.isChecked = product.completed
             }
         }
 
