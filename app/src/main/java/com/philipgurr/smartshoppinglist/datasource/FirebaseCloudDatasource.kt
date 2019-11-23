@@ -5,6 +5,8 @@ import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.extensions.await
 import com.philipgurr.smartshoppinglist.util.extensions.parse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 private const val USER_LISTS_COLLECTION_ID = "user"
@@ -19,7 +21,9 @@ class FirebaseCloudDatasource @Inject constructor(
         .document("test")
         .collection(SHOPPING_LISTS_COLLECTION_ID)
 
-    override suspend fun get(name: String) = getShoppingList(name)
+    override suspend fun get(name: String) = withContext(Dispatchers.IO) {
+        getShoppingList(name)
+    }
 
     private suspend fun getShoppingList(name: String): ShoppingList {
         val snapshot = shoppingListCollection.document(name).get().await()
@@ -36,7 +40,7 @@ class FirebaseCloudDatasource @Inject constructor(
             .get().await()
             .parse<Product>()
 
-    override suspend fun getAll(): List<ShoppingList> {
+    override suspend fun getAll() = withContext(Dispatchers.IO) {
         val snapshots = shoppingListCollection.get().await()
         val shoppingLists = mutableListOf<ShoppingList>()
 
@@ -45,7 +49,7 @@ class FirebaseCloudDatasource @Inject constructor(
             shoppingLists.add(getShoppingList(shoppingListId))
         }
 
-        return shoppingLists
+        shoppingLists
     }
 
     override suspend fun insert(value: ShoppingList) {
