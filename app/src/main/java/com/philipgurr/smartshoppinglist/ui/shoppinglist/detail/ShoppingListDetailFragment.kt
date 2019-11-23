@@ -11,7 +11,7 @@ import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListToUIMapper
 import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI
-import com.philipgurr.smartshoppinglist.ui.fragments.ShoppingListDetailFragmentArgs
+import com.philipgurr.smartshoppinglist.ui.shoppinglist.detail.ShoppingListDetailFragmentArgs
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
 
 /**
@@ -31,11 +31,9 @@ class ShoppingListDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        arguments?.let {
+        arguments?.let {bundle ->
             val safeArgs =
-                ShoppingListDetailFragmentArgs.fromBundle(
-                    it
-                )
+                ShoppingListDetailFragmentArgs.fromBundle(bundle)
             shoppingList = safeArgs.shoppingList
             shoppingListUi = mapper.map(shoppingList)
         }

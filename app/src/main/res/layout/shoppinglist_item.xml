@@ -12,7 +12,7 @@
 
         <variable
             name="viewHolder"
-            type="com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListAdapter" />
+            type="com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListAdapter.ItemViewHolder" />
     </data>
 
     <LinearLayout

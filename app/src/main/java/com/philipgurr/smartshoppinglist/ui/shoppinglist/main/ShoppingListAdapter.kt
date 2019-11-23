@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.philipgurr.smartshoppinglist.databinding.ShoppinglistItemBinding
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListToUIMapper
-import com.philipgurr.smartshoppinglist.ui.fragments.ShoppingListFragmentDirections
+import com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListFragmentDirections
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
     var data = listOf<ShoppingList>()
