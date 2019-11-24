@@ -12,6 +12,11 @@ import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
+import org.jetbrains.anko.customView
+import org.jetbrains.anko.editText
+import org.jetbrains.anko.okButton
+import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
 
 class ShoppingListFragment : DaggerFragment() {
@@ -42,6 +47,22 @@ class ShoppingListFragment : DaggerFragment() {
             shoppingListAdapter.data = shoppingLists
             shoppingListAdapter.notifyDataSetChanged()
         })
+
+        fab_add_list.onClick {
+            createNewShoppingList()
+        }
+    }
+
+    private fun createNewShoppingList() {
+        alert("New List") {
+            customView {
+                val name = editText { hint = "Enter name..." }
+                okButton {
+                    val text = name.text.toString()
+                    viewModel.createShoppingList(text)
+                }
+            }
+        }.show()
     }
 
     private fun setupRecyclerView() {

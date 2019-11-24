@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GetShoppingListsUseCase @Inject constructor(
+class GetListsUseCase @Inject constructor(
     private val repository: Repository<ShoppingList>
 ) {
 

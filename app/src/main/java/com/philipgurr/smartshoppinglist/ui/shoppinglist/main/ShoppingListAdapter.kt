@@ -30,8 +30,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHol
     }
 
     class ItemViewHolder(private val binding: ShoppinglistItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val mapper =
-            ShoppingListToUIMapper()
+        private val mapper = ShoppingListToUIMapper()
 
         fun bind(shoppingList: ShoppingList) {
             val shoppingListUI = mapper.map(shoppingList)

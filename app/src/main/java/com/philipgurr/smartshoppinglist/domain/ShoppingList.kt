@@ -8,6 +8,4 @@ class ShoppingList(
     val name: String = "",
     val created: Date = Date(),
     var products: List<Product> = listOf()
-) : Serializable {
-    fun getCompletedProducts() = products.filter { it.completed }
-}
+) : Serializable

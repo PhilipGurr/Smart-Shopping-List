@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.domain.usecases.GetShoppingListsUseCase
+import com.philipgurr.smartshoppinglist.domain.usecases.AddListUseCase
+import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ShoppingListViewModel @Inject constructor(
-    private val shoppingListsUseCase: GetShoppingListsUseCase
+    private val getListsUseCase: GetListsUseCase,
+    private val addListUseCase: AddListUseCase
 ) : ViewModel() {
 
     private val _text = MutableLiveData<List<ShoppingList>>()
@@ -18,7 +20,13 @@ class ShoppingListViewModel @Inject constructor(
 
     fun loadShoppingLists() {
         viewModelScope.launch {
-            _text.value = shoppingListsUseCase.getShoppingLists()
+            _text.value = getListsUseCase.getShoppingLists()
+        }
+    }
+
+    fun createShoppingList(name: String) {
+        viewModelScope.launch {
+            addListUseCase.addList(name)
         }
     }
 }
