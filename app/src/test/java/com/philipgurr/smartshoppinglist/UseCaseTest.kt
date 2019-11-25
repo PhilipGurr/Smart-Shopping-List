@@ -4,11 +4,12 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.domain.usecases.GetShoppingListsUseCase
+import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
 import com.philipgurr.smartshoppinglist.repository.Repository
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import java.util.*
 
 class UseCaseTest {
     private val repository: Repository<ShoppingList> = mock()
@@ -18,6 +19,7 @@ class UseCaseTest {
     private val testShoppingList = ShoppingList(
         "testShoppingList",
         "Test Shopping List",
+        Date(),
         listOf(testProduct, testProduct2)
     )
 
@@ -25,7 +27,7 @@ class UseCaseTest {
     fun testShoppingListUseCase() = runBlocking {
         whenever(repository.getAll()).thenReturn(listOf(testShoppingList))
 
-        val getshoppingListUseCase = GetShoppingListsUseCase(repository)
+        val getshoppingListUseCase = GetListsUseCase(repository)
         val actualShoppingLists = getshoppingListUseCase.getShoppingLists()
 
         assertEquals(listOf(testShoppingList), actualShoppingLists)
