@@ -7,13 +7,26 @@
 
     <fragment
         android:id="@+id/nav_shopping_lists"
-        android:name="com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListFragment"
+        android:name="com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListFragment"
         android:label="@string/menu_my_lists"
-        tools:layout="@layout/fragment_my_lists" />
+        tools:layout="@layout/fragment_my_lists" >
+        <action
+            android:id="@+id/action_shopping_list_detail"
+            app:destination="@id/nav_shopping_list_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_completed_shopping_lists"
         android:name="com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListFragment"
         android:label="@string/menu_completed_lists"
         tools:layout="@layout/fragment_completed_list" />
+    <fragment
+        android:id="@+id/nav_shopping_list_detail"
+        android:name="com.philipgurr.smartshoppinglist.ui.shoppinglist.detail.ShoppingListDetailFragment"
+        android:label="Products"
+        tools:layout="@layout/fragment_shopping_list_detail" >
+        <argument
+            android:name="shoppingList"
+            app:argType="com.philipgurr.smartshoppinglist.domain.ShoppingList" />
+    </fragment>
 </navigation>

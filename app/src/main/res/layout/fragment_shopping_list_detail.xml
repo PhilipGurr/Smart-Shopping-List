@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="shoppingListUI"
+            type="com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI" />
+    </data>
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.shoppinglist.detail.ShoppingListDetailFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/shoppingListNameDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{shoppingListUI.name}"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/shoppingListProgressDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{@string/progress(shoppingListUI.progress, shoppingListUI.totalProducts)}"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <ProgressBar
+                android:id="@+id/shoppingListProgressBarDetail"
+                android:layout_width="match_parent"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_height="12sp"
+                android:indeterminate="false"
+                android:progressBackgroundTint="@color/colorPrimaryDark"
+                android:progressTint="@color/colorPrimary"
+                android:max="@{shoppingListUI.totalProducts}"
+                android:progress="@{shoppingListUI.progress}" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productListRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/productlist_item" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@android:drawable/ic_dialog_email" />
+        </FrameLayout>
+    </LinearLayout>
+</layout>

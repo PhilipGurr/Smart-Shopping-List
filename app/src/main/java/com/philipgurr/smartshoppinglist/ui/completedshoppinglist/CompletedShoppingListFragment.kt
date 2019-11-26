@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.philipgurr.smartshoppinglist.R
+import com.philipgurr.smartshoppinglist.vm.CompletedShoppingListViewModel
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 

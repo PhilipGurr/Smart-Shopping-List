@@ -2,9 +2,11 @@ package com.philipgurr.smartshoppinglist.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListViewModel
-import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListViewModel
-import com.philipgurr.smartshoppinglist.util.ViewModelFactory
+import com.philipgurr.smartshoppinglist.di.ViewModelKey
+import com.philipgurr.smartshoppinglist.vm.ViewModelFactory
+import com.philipgurr.smartshoppinglist.vm.CompletedShoppingListViewModel
+import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
+import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -20,6 +22,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CompletedShoppingListViewModel::class)
     abstract fun bindCompletedShoppingListViewModel(viewModel: CompletedShoppingListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ShoppingListDetailViewModel::class)
+    abstract fun bindShoppingListDetailViewModel(viewModel: ShoppingListDetailViewModel): ViewModel
 
     @Binds
     abstract fun bindFactory(factory: ViewModelFactory): ViewModelProvider.Factory
