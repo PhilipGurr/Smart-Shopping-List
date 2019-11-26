@@ -53,10 +53,12 @@ class FirebaseCloudDatasource @Inject constructor(
     }
 
     override suspend fun insert(value: ShoppingList) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        withContext(Dispatchers.IO) {
+            shoppingListCollection.document(value.id).set(value)
+        }
     }
 
     override suspend fun insertAll(values: List<ShoppingList>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        values.forEach { insert(it) }
     }
 }
