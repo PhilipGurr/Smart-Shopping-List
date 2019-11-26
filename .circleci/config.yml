@@ -21,8 +21,8 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          - name: Set up Google Services
-          - command: echo $GOOGLE_SERVICES | base64 --decode > ~/${HOME}/app/google-services.json
+          name: Set up Google Services
+          command: echo $GOOGLE_SERVICES | base64 --decode > ~/${HOME}/app/google-services.json
       - run:
           name: Run Tests
           command: ./gradlew lint test
