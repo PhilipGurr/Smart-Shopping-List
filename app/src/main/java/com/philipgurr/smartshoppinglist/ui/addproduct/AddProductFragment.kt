@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.add
+package com.philipgurr.smartshoppinglist.ui.addproduct
 
 
 import android.os.Bundle
