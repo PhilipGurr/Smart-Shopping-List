@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
@@ -16,6 +17,7 @@ import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI
 import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import javax.inject.Inject
 
 class ShoppingListDetailFragment : DaggerFragment() {
@@ -55,18 +57,8 @@ class ShoppingListDetailFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //setupHeader()
         setupRecyclerView()
-    }
-
-    private fun setupHeader() = with(shoppingListUi) {
-        shoppingListNameDetail.text = name
-        shoppingListProgressDetail.text = "${progress}/${totalProducts}"
-
-        shoppingListProgressBarDetail.max = totalProducts
-        shoppingListProgressBarDetail.progress = progress
-        // TODO: "Set progressbar color"
+        setupFab()
     }
 
     private fun setupRecyclerView() {
@@ -76,5 +68,11 @@ class ShoppingListDetailFragment : DaggerFragment() {
 
         productListAdapter.data = viewModel.getProducts()
         productListAdapter.notifyDataSetChanged()
+    }
+
+    private fun setupFab() {
+        fab_add_product.onClick {
+            findNavController().navigate(R.id.nav_add_product_fragment)
+        }
     }
 }

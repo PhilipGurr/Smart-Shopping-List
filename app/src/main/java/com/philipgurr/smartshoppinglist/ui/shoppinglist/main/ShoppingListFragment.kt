@@ -40,7 +40,6 @@ class ShoppingListFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
 
         viewModel.shoppingLists.observe(this, Observer { shoppingLists ->
