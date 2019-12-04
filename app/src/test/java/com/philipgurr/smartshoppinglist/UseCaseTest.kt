@@ -12,7 +12,7 @@ import org.junit.Test
 import java.util.*
 
 class UseCaseTest {
-    private val repository: Repository<ShoppingList> = mock()
+    private val repository: Repository = mock()
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)
@@ -25,7 +25,7 @@ class UseCaseTest {
 
     @Test
     fun testShoppingListUseCase() = runBlocking {
-        whenever(repository.getAll()).thenReturn(listOf(testShoppingList))
+        whenever(repository.getAllLists()).thenReturn(listOf(testShoppingList))
 
         val getshoppingListUseCase = GetListsUseCase(repository)
         val actualShoppingLists = getshoppingListUseCase.getShoppingLists()

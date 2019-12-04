@@ -30,7 +30,7 @@ class ShoppingListViewModelTest {
     @get:Rule
     val instantTaskRule = InstantTaskExecutorRule()
 
-    private val repository: Repository<ShoppingList> = mock()
+    private val repository: Repository = mock()
     private val shoppingListsUseCase = GetListsUseCase(repository)
     private val addListsUseCase = AddListUseCase(repository)
     private val viewModel = ShoppingListViewModel(shoppingListsUseCase, addListsUseCase)
@@ -51,7 +51,7 @@ class ShoppingListViewModelTest {
 
     @Test
     fun testGetLists() = runBlocking(Dispatchers.Main) {
-        whenever(repository.getAll()).thenReturn(listOf(testShoppingList))
+        whenever(repository.getAllLists()).thenReturn(listOf(testShoppingList))
 
         viewModel.loadShoppingLists()
         assertEquals(listOf(testShoppingList), viewModel.shoppingLists.blockingObserve())

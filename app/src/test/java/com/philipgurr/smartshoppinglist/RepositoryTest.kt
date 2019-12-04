@@ -2,7 +2,7 @@ package com.philipgurr.smartshoppinglist
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import com.philipgurr.smartshoppinglist.datasource.Datasource
+import com.philipgurr.smartshoppinglist.datasource.ShoppingListDatasource
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
@@ -14,8 +14,8 @@ import java.util.*
 private const val SHOPPING_LIST_NAME = "Test Shopping List"
 
 class RepositoryTest {
-    private val datasource: Datasource<ShoppingList> = mock()
-    private val repository = ShoppingListRepository(datasource)
+    private val shoppingListDatasource: ShoppingListDatasource = mock()
+    private val repository = ShoppingListRepository(shoppingListDatasource)
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)
@@ -28,24 +28,24 @@ class RepositoryTest {
 
     @Test
     fun testShoppingListRepositoryGetAll() = runBlocking {
-        whenever(datasource.getAll()).thenReturn(listOf(testShoppingList))
+        whenever(shoppingListDatasource.getAll()).thenReturn(listOf(testShoppingList))
 
-        val actualShoppingLists = repository.getAll()
+        val actualShoppingLists = repository.getAllLists()
         assertEquals(listOf(testShoppingList), actualShoppingLists)
     }
 
     @Test
     fun testShoppingListRepositoryGetSingle() = runBlocking {
-        whenever(datasource.get(SHOPPING_LIST_NAME)).thenReturn(testShoppingList)
+        whenever(shoppingListDatasource.get(SHOPPING_LIST_NAME)).thenReturn(testShoppingList)
 
-        val actualShoppingList = repository.get(SHOPPING_LIST_NAME)
+        val actualShoppingList = repository.getList(SHOPPING_LIST_NAME)
         assertEquals(testShoppingList, actualShoppingList)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun testShoppingListRepositoryWithEmptyName() {
         runBlocking {
-            repository.get("")
+            repository.getList("")
         }
     }
 }
