@@ -13,9 +13,9 @@ private const val USER_LISTS_COLLECTION_ID = "user"
 private const val SHOPPING_LISTS_COLLECTION_ID = "shoppinglists"
 private const val PRODUCT_LISTS_COLLECTION_ID = "products"
 
-class FirebaseCloudDatasource @Inject constructor(
+class FirebaseCloudShoppingListDatasource @Inject constructor(
     database: FirebaseFirestore
-) : Datasource<ShoppingList> {
+) : ShoppingListDatasource {
     private val shoppingListCollection = database
         .collection(USER_LISTS_COLLECTION_ID)
         .document("test")
@@ -55,10 +55,28 @@ class FirebaseCloudDatasource @Inject constructor(
     override suspend fun insert(value: ShoppingList) {
         withContext(Dispatchers.IO) {
             shoppingListCollection.document(value.id).set(value)
+            addProducts(value.id, *value.products.toTypedArray())
         }
     }
 
     override suspend fun insertAll(values: List<ShoppingList>) {
         values.forEach { insert(it) }
+    }
+
+    override suspend fun getSubItems(shoppingListName: String) = getProducts(shoppingListName)
+
+    override suspend fun insertSubItem(shoppingListId: String, value: Product) {
+        addProducts(shoppingListId, value)
+    }
+
+    private suspend fun addProducts(shoppingListId: String, vararg values: Product) {
+        withContext(Dispatchers.IO) {
+            for (product in values) {
+                shoppingListCollection
+                    .document(shoppingListId)
+                    .collection(PRODUCT_LISTS_COLLECTION_ID)
+                    .add(product)
+            }
+        }
     }
 }

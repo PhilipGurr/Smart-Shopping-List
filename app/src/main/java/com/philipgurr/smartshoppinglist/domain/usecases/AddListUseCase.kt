@@ -9,7 +9,7 @@ import java.util.*
 import javax.inject.Inject
 
 class AddListUseCase @Inject constructor(
-    private val repository: Repository<ShoppingList>
+    private val repository: Repository
 ) {
 
     suspend fun addList(name: String) {
@@ -20,7 +20,7 @@ class AddListUseCase @Inject constructor(
                 Date(),
                 listOf()
             )
-            repository.add(newList)
+            repository.addList(newList)
         }
     }
 }

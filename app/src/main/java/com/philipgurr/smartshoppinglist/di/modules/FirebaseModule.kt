@@ -5,10 +5,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.philipgurr.smartshoppinglist.datasource.Datasource
-import com.philipgurr.smartshoppinglist.datasource.FirebaseCloudDatasource
-import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 

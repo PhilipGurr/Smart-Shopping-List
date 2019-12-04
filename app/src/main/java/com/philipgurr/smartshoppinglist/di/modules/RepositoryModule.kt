@@ -9,5 +9,5 @@ import dagger.Module
 @Module
 interface RepositoryModule {
     @Binds
-    fun bindRepository(repository: ShoppingListRepository): Repository<ShoppingList>
+    fun bindRepository(repository: ShoppingListRepository): Repository
 }

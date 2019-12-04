@@ -1,7 +1,7 @@
 package com.philipgurr.smartshoppinglist.di.modules
 
-import com.philipgurr.smartshoppinglist.datasource.Datasource
-import com.philipgurr.smartshoppinglist.datasource.FirebaseCloudDatasource
+import com.philipgurr.smartshoppinglist.datasource.ShoppingListDatasource
+import com.philipgurr.smartshoppinglist.datasource.FirebaseCloudShoppingListDatasource
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import dagger.Binds
 import dagger.Module
@@ -9,5 +9,5 @@ import dagger.Module
 @Module
 interface DatasourceModule {
     @Binds
-    fun bindCloudDataSource(datasourceFirebase: FirebaseCloudDatasource): Datasource<ShoppingList>
+    fun bindCloudDataSource(datasourceFirebase: FirebaseCloudShoppingListDatasource): ShoppingListDatasource
 }

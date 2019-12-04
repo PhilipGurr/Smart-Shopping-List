@@ -1,16 +1,16 @@
 package com.philipgurr.smartshoppinglist.domain.usecases
 
+import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GetListsUseCase @Inject constructor(
+class GetProductsUseCase @Inject constructor(
     private val repository: Repository
 ) {
-
-    suspend fun getShoppingLists() = withContext(Dispatchers.Default) {
-        repository.getAllLists().sortedBy { it.created }
+    suspend fun getProducts(shoppingListName: String) = withContext(Dispatchers.Default) {
+        repository.getProducts(shoppingListName)
     }
 }
