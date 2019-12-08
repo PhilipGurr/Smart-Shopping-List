@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="shoppingListUI"
-            type="com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI" />
+            name="viewModel"
+            type="com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel" />
     </data>
 
     <LinearLayout
@@ -24,7 +24,7 @@
                 android:id="@+id/shoppingListNameDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{shoppingListUI.name}"
+                android:text="@{viewModel.shoppingList.name}"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
@@ -33,7 +33,7 @@
                 android:id="@+id/shoppingListProgressDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{@string/progress(shoppingListUI.progress, shoppingListUI.totalProducts)}"
+                android:text="@{@string/progress(viewModel.shoppingList.completedProducts.size(), viewModel.shoppingList.products.size())}"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -46,8 +46,8 @@
                 android:indeterminate="false"
                 android:progressBackgroundTint="@color/colorPrimaryDark"
                 android:progressTint="@color/colorPrimary"
-                android:max="@{shoppingListUI.totalProducts}"
-                android:progress="@{shoppingListUI.progress}" />
+                android:max="@{viewModel.shoppingList.products.size()}"
+                android:progress="@{viewModel.shoppingList.completedProducts.size()}" />
         </LinearLayout>
 
         <FrameLayout

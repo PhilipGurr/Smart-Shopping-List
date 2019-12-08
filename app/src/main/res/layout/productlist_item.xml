@@ -5,6 +5,9 @@
         <variable
             name="product"
             type="com.philipgurr.smartshoppinglist.domain.Product" />
+        <variable
+            name="viewModel"
+            type="com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel" />
     </data>
 
     <LinearLayout
@@ -24,6 +27,7 @@
         <CheckBox
             android:id="@+id/completedCheckBox"
             android:checked="@{product.completed}"
+            android:onClick="@{() -> viewModel.completeProduct(product)}"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1" />
