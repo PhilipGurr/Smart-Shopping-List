@@ -5,6 +5,7 @@ import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.extensions.await
 import com.philipgurr.smartshoppinglist.util.extensions.parse
+import com.philipgurr.smartshoppinglist.util.extensions.toId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -75,7 +76,8 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
                 shoppingListCollection
                     .document(shoppingListId)
                     .collection(PRODUCT_LISTS_COLLECTION_ID)
-                    .add(product)
+                    .document(product.name.toId())
+                    .set(product)
             }
         }
     }
