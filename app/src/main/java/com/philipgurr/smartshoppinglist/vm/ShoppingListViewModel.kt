@@ -27,6 +27,7 @@ class ShoppingListViewModel @Inject constructor(
     fun createShoppingList(name: String) {
         viewModelScope.launch {
             addListUseCase.addList(name)
+            loadShoppingLists()
         }
     }
 }
