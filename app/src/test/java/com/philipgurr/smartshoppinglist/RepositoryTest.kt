@@ -6,6 +6,7 @@ import com.philipgurr.smartshoppinglist.datasource.ShoppingListDatasource
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
+import com.philipgurr.smartshoppinglist.util.extensions.toId
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -36,7 +37,7 @@ class RepositoryTest {
 
     @Test
     fun testShoppingListRepositoryGetSingle() = runBlocking {
-        whenever(shoppingListDatasource.get(SHOPPING_LIST_NAME)).thenReturn(testShoppingList)
+        whenever(shoppingListDatasource.get(SHOPPING_LIST_NAME.toId())).thenReturn(testShoppingList)
 
         val actualShoppingList = repository.getList(SHOPPING_LIST_NAME)
         assertEquals(testShoppingList, actualShoppingList)
