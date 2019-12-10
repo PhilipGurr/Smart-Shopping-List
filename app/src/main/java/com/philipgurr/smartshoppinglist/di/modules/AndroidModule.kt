@@ -1,19 +1,27 @@
 package com.philipgurr.smartshoppinglist.di.modules
 
-import com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListFragment
-import com.philipgurr.smartshoppinglist.ui.shoppinglist.detail.ShoppingListDetailFragment
-import com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListFragment
+import com.philipgurr.smartshoppinglist.ui.completedlists.CompletedListsFragment
+import com.philipgurr.smartshoppinglist.ui.detail.ListDetailFragment
+import com.philipgurr.smartshoppinglist.ui.detail.addproduct.AddProductFragment
+import com.philipgurr.smartshoppinglist.ui.detail.addproduct.CameraFragment
+import com.philipgurr.smartshoppinglist.ui.mylists.main.MyListsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class AndroidModule {
     @ContributesAndroidInjector(modules = [ViewModelModule::class])
-    abstract fun contributeShoppingListFragment(): ShoppingListFragment
+    abstract fun contributeShoppingListFragment(): MyListsFragment
 
     @ContributesAndroidInjector(modules = [ViewModelModule::class])
-    abstract fun contributeShoppingListDetailFragment(): ShoppingListDetailFragment
+    abstract fun contributeShoppingListDetailFragment(): ListDetailFragment
 
     @ContributesAndroidInjector(modules = [ViewModelModule::class])
-    abstract fun contributeCompletedShoppingListFragment(): CompletedShoppingListFragment
+    abstract fun contributeCompletedShoppingListFragment(): CompletedListsFragment
+
+    @ContributesAndroidInjector(modules = [ViewModelModule::class])
+    abstract fun contributeAddProductFragment(): AddProductFragment
+
+    @ContributesAndroidInjector(modules = [ViewModelModule::class])
+    abstract fun contributeCameraFragment(): CameraFragment
 }

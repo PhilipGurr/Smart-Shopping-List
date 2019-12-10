@@ -8,11 +8,11 @@
 
         <variable
             name="shoppingListUI"
-            type="com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI" />
+            type="com.philipgurr.smartshoppinglist.ui.mylists.ShoppingListUI" />
 
         <variable
             name="viewHolder"
-            type="com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListAdapter.ItemViewHolder" />
+            type="com.philipgurr.smartshoppinglist.ui.mylists.main.MyListsAdapter.ShoppingListViewHolder" />
     </data>
 
     <LinearLayout

@@ -3,10 +3,10 @@ package com.philipgurr.smartshoppinglist.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.philipgurr.smartshoppinglist.di.ViewModelKey
+import com.philipgurr.smartshoppinglist.vm.CompletedListsViewModel
+import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
+import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import com.philipgurr.smartshoppinglist.vm.ViewModelFactory
-import com.philipgurr.smartshoppinglist.vm.CompletedShoppingListViewModel
-import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
-import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -15,18 +15,18 @@ import dagger.multibindings.IntoMap
 abstract class ViewModelModule {
     @Binds
     @IntoMap
-    @ViewModelKey(ShoppingListViewModel::class)
-    abstract fun bindShoppingListViewModel(viewModel: ShoppingListViewModel): ViewModel
+    @ViewModelKey(MyListsViewModel::class)
+    abstract fun bindShoppingListViewModel(viewModel: MyListsViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(CompletedShoppingListViewModel::class)
-    abstract fun bindCompletedShoppingListViewModel(viewModel: CompletedShoppingListViewModel): ViewModel
+    @ViewModelKey(CompletedListsViewModel::class)
+    abstract fun bindCompletedShoppingListViewModel(viewModel: CompletedListsViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(ShoppingListDetailViewModel::class)
-    abstract fun bindShoppingListDetailViewModel(viewModel: ShoppingListDetailViewModel): ViewModel
+    @ViewModelKey(ListDetailViewModel::class)
+    abstract fun bindShoppingListDetailViewModel(viewModel: ListDetailViewModel): ViewModel
 
     @Binds
     abstract fun bindFactory(factory: ViewModelFactory): ViewModelProvider.Factory

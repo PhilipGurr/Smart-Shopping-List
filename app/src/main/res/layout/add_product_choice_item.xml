@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="label"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/choiceLabel"
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:gravity="center"
+            android:text="@{label}"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="@drawable/product_choice_bg"
+            android:layout_margin="10sp"/>
+
+    </LinearLayout>
+</layout>

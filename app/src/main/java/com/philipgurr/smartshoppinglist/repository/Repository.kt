@@ -1,8 +1,13 @@
 package com.philipgurr.smartshoppinglist.repository
 
-interface Repository<T> {
-    suspend fun get(name: String): T
-    suspend fun getAll(): List<T>
-    suspend fun add(value: T)
-    suspend fun addAll(values: List<T>)
+import com.philipgurr.smartshoppinglist.domain.Product
+import com.philipgurr.smartshoppinglist.domain.ShoppingList
+
+interface Repository {
+    suspend fun getList(name: String): ShoppingList
+    suspend fun getAllLists(): List<ShoppingList>
+    suspend fun addList(value: ShoppingList)
+    suspend fun addLists(values: List<ShoppingList>)
+    suspend fun getProducts(shoppingListName: String): List<Product>
+    suspend fun addProduct(shoppingListName: String, value: Product)
 }
