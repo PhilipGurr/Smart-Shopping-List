@@ -1,17 +1,20 @@
 package com.philipgurr.smartshoppinglist.ui.addproduct
 
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.productinput.ProductInputMethod
-import com.philipgurr.smartshoppinglist.productinput.ProductInputMethodFactory
+import com.philipgurr.smartshoppinglist.productinput.processors.BarcodeInputMethod
+import com.philipgurr.smartshoppinglist.productinput.processors.TextInputMethod
 import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_add_product.*
@@ -44,9 +47,11 @@ class AddProductFragment : DaggerFragment() {
 
     private fun setupRecyclerView() {
         choiceAdapter = ProductChoiceAdapter { item ->
-            val inputMethod = ProductInputMethodFactory.create(item)
+            val textInputMethod = TextInputMethod()
+            val barcodeInputMethod = BarcodeInputMethod()
             when(item) {
-                ProductInputMethod.TEXT_INPUT_METHOD -> addProductByText(inputMethod)
+                ProductInputMethod.TEXT_INPUT_METHOD -> addProductByText(textInputMethod)
+                ProductInputMethod.BARCODE_INPUT_METHOD -> addProductByBarcode(barcodeInputMethod)
             }
         }
         gridLayoutManager = GridLayoutManager(context, 2)
@@ -65,5 +70,9 @@ class AddProductFragment : DaggerFragment() {
                 }
             }
         }.show()
+    }
+
+    private fun addProductByBarcode(inputMethod: ProductInputMethod<Bitmap>) {
+        findNavController().navigate(R.id.camera_fragment)
     }
 }

@@ -26,8 +26,7 @@ class ProductChoiceAdapter(
     class ChoiceViewHolder(
         private val onClick: (String) -> Unit,
         private val binding: AddProductChoiceItemBinding
-    ) :
-        ItemViewHolder<String, AddProductChoiceItemBinding>(binding) {
+    ) : ItemViewHolder<String, AddProductChoiceItemBinding>(binding) {
         override fun bind(item: String) {
             with(binding) {
                 label = item

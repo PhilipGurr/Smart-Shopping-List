@@ -1,6 +1,7 @@
 package com.philipgurr.smartshoppinglist.di.modules
 
 import com.philipgurr.smartshoppinglist.ui.addproduct.AddProductFragment
+import com.philipgurr.smartshoppinglist.ui.addproduct.CameraFragment
 import com.philipgurr.smartshoppinglist.ui.completedshoppinglist.CompletedShoppingListFragment
 import com.philipgurr.smartshoppinglist.ui.shoppinglist.detail.ShoppingListDetailFragment
 import com.philipgurr.smartshoppinglist.ui.shoppinglist.main.ShoppingListFragment
@@ -20,4 +21,7 @@ abstract class AndroidModule {
 
     @ContributesAndroidInjector(modules = [ViewModelModule::class])
     abstract fun contributeAddProductFragment(): AddProductFragment
+
+    @ContributesAndroidInjector(modules = [ViewModelModule::class])
+    abstract fun contributeCameraFragment(): CameraFragment
 }

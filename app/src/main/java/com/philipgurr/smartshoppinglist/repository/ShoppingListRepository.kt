@@ -12,7 +12,7 @@ class ShoppingListRepository @Inject constructor(
 
     override suspend fun getList(name: String): ShoppingList {
         require("" != name) { "Name must not be empty" }
-        return shoppingListDatasource.get(name)
+        return shoppingListDatasource.get(name.toId())
     }
 
     override suspend fun getAllLists() = shoppingListDatasource.getAll()

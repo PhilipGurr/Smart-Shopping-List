@@ -33,7 +33,7 @@
                 android:id="@+id/shoppingListProgressDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{@string/progress(viewModel.shoppingList.completedProducts.size(), viewModel.shoppingList.products.size())}"
+                android:text="@{@string/progress(viewModel.shoppingList.completedProducts().size, viewModel.shoppingList.products.size)}"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -46,8 +46,8 @@
                 android:indeterminate="false"
                 android:progressBackgroundTint="@color/colorPrimaryDark"
                 android:progressTint="@color/colorPrimary"
-                android:max="@{viewModel.shoppingList.products.size()}"
-                android:progress="@{viewModel.shoppingList.completedProducts.size()}" />
+                android:max="@{viewModel.shoppingList.products.size}"
+                android:progress="@{viewModel.shoppingList.completedProducts().size}" />
         </LinearLayout>
 
         <FrameLayout

@@ -5,7 +5,10 @@ import java.util.*
 
 class ShoppingList(
     var id: String = "",
-    val name: String = "",
+    var name: String = "",
     val created: Date = Date(),
     var products: List<Product> = listOf()
 ) : Serializable
+{
+    fun completedProducts() = products.filter { it.completed }
+}
