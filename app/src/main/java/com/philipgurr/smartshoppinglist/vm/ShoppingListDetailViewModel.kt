@@ -7,39 +7,32 @@ import androidx.lifecycle.viewModelScope
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.domain.usecases.AddProductUseCase
-import com.philipgurr.smartshoppinglist.domain.usecases.GetProductsUseCase
+import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ShoppingListDetailViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase,
+    private val getListsUseCase: GetListsUseCase,
     private val addProductUseCase: AddProductUseCase
 ) : ViewModel() {
-    val shoppingList = MutableLiveData<ShoppingList>()
-    private val _products = MutableLiveData<List<Product>>()
-    val products: LiveData<List<Product>> = _products
+    var listName = ""
+    private val _shoppingList = MutableLiveData<ShoppingList>()
+    val shoppingList: LiveData<ShoppingList> = _shoppingList
 
-    fun loadProducts() {
+    fun loadShoppingList() {
         viewModelScope.launch {
-            _products.value = getProductsUseCase.getProducts(shoppingList.value!!.name)
-            updateShoppingList()
+            _shoppingList.value = getListsUseCase.getShoppingList(listName)
         }
     }
 
     fun insertProduct(product: Product) {
         viewModelScope.launch {
-            addProductUseCase.add(shoppingList.value!!.name, product)
-            loadProducts()
+            addProductUseCase.add(listName, product)
+            loadShoppingList()
         }
     }
 
-    private fun updateShoppingList() = with(shoppingList.value!!) {
-        viewModelScope.launch {
-            shoppingList.value = ShoppingList(id, name, created, _products.value!!)
-        }
-    }
-
-    fun completeProduct(product: Product) {
+    fun toggleCompleted(product: Product) {
         viewModelScope.launch {
             val newProduct = Product(product.name, !product.completed)
             insertProduct(newProduct)

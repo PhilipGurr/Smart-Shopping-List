@@ -30,24 +30,32 @@ class ShoppingListDetailFragment : DaggerFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var productListAdapter: ProductListAdapter
-    private val mapper = ShoppingListToUIMapper()
-    private lateinit var shoppingListUi: ShoppingListUI
     private lateinit var binding: FragmentShoppingListDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        parseArguments()
 
-        arguments?.let { bundle ->
-            val safeArgs =
-                ShoppingListDetailFragmentArgs.fromBundle(bundle)
-            viewModel.shoppingList.value = safeArgs.shoppingList
-            shoppingListUi = mapper.map(viewModel.shoppingList.value!!)
-        }
         productListAdapter = ProductListAdapter(viewModel)
 
-        binding = DataBindingUtil.inflate(
+        binding = setUpDataBinding(inflater, container)
+        return binding.root
+    }
+
+    private fun parseArguments() {
+        arguments?.let { bundle ->
+            val safeArgs = ShoppingListDetailFragmentArgs.fromBundle(bundle)
+            viewModel.listName = safeArgs.shoppingList.name
+        }
+    }
+
+    private fun setUpDataBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentShoppingListDetailBinding {
+        val binding: FragmentShoppingListDetailBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_shopping_list_detail,
             container,
@@ -55,7 +63,7 @@ class ShoppingListDetailFragment : DaggerFragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        return binding.root
+        return binding
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,8 +71,8 @@ class ShoppingListDetailFragment : DaggerFragment() {
         setupRecyclerView()
         setupFab()
 
-        viewModel.products.observe(this, Observer { products ->
-            productListAdapter.data = products
+        viewModel.shoppingList.observe(this, Observer { list ->
+            productListAdapter.data = list.products
             productListAdapter.notifyDataSetChanged()
         })
     }
@@ -83,6 +91,6 @@ class ShoppingListDetailFragment : DaggerFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadProducts()
+        viewModel.loadShoppingList()
     }
 }
