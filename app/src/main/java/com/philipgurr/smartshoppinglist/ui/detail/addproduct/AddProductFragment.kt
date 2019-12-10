@@ -1,21 +1,18 @@
-package com.philipgurr.smartshoppinglist.ui.addproduct
+package com.philipgurr.smartshoppinglist.ui.detail.addproduct
 
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.productinput.ProductInputMethod
-import com.philipgurr.smartshoppinglist.productinput.processors.BarcodeInputMethod
 import com.philipgurr.smartshoppinglist.productinput.processors.TextInputMethod
-import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
+import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_add_product.*
 import org.jetbrains.anko.customView
@@ -28,10 +25,10 @@ class AddProductFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(ShoppingListDetailViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
     }
     private lateinit var gridLayoutManager: GridLayoutManager
-    private lateinit var choiceAdapter: ProductChoiceAdapter
+    private lateinit var choiceListAdapter: ProductChoiceListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,20 +43,19 @@ class AddProductFragment : DaggerFragment() {
     }
 
     private fun setupRecyclerView() {
-        choiceAdapter = ProductChoiceAdapter { item ->
-            val textInputMethod = TextInputMethod()
-            val barcodeInputMethod = BarcodeInputMethod()
-            when(item) {
-                ProductInputMethod.TEXT_INPUT_METHOD -> addProductByText(textInputMethod)
-                ProductInputMethod.BARCODE_INPUT_METHOD -> addProductByBarcode(barcodeInputMethod)
+        choiceListAdapter = ProductChoiceListAdapter { item ->
+            when (item) {
+                ProductInputMethod.TEXT_INPUT_METHOD -> addProductByText()
+                ProductInputMethod.BARCODE_INPUT_METHOD -> addProductByBarcode()
             }
         }
         gridLayoutManager = GridLayoutManager(context, 2)
         addProductChoice.layoutManager = gridLayoutManager
-        addProductChoice.adapter = choiceAdapter
+        addProductChoice.adapter = choiceListAdapter
     }
 
-    private fun addProductByText(inputMethod: ProductInputMethod<String>) {
+    private fun addProductByText() {
+        val inputMethod = TextInputMethod()
         alert("New Product") {
             customView {
                 val name = editText { hint = "Enter..." }
@@ -72,7 +68,7 @@ class AddProductFragment : DaggerFragment() {
         }.show()
     }
 
-    private fun addProductByBarcode(inputMethod: ProductInputMethod<Bitmap>) {
+    private fun addProductByBarcode() {
         findNavController().navigate(R.id.camera_fragment)
     }
 }

@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.shoppinglist.main
+package com.philipgurr.smartshoppinglist.ui.mylists.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
+import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
 import org.jetbrains.anko.customView
@@ -19,16 +19,16 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
 
-class ShoppingListFragment : DaggerFragment() {
+class MyListsFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(this, factory).get(ShoppingListViewModel::class.java)
+        ViewModelProviders.of(this, factory).get(MyListsViewModel::class.java)
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val shoppingListAdapter =
-        ShoppingListAdapter()
+        MyListsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

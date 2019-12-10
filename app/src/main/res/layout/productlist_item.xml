@@ -7,7 +7,7 @@
             type="com.philipgurr.smartshoppinglist.domain.Product" />
         <variable
             name="viewModel"
-            type="com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel" />
+            type="com.philipgurr.smartshoppinglist.vm.ListDetailViewModel" />
     </data>
 
     <LinearLayout

@@ -1,20 +1,17 @@
-package com.philipgurr.smartshoppinglist.ui.shoppinglist.detail
+package com.philipgurr.smartshoppinglist.ui.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.RecyclerView
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.ProductlistItemBinding
 import com.philipgurr.smartshoppinglist.domain.Product
-import com.philipgurr.smartshoppinglist.ui.ListBindingAdapter
-import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
+import com.philipgurr.smartshoppinglist.ui.BaseListBindingAdapter
+import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 
 class ProductListAdapter(
-    private val viewModel: ShoppingListDetailViewModel
-) : ListBindingAdapter<Product, ProductlistItemBinding>() {
+    private val viewModel: ListDetailViewModel
+) : BaseListBindingAdapter<Product, ProductlistItemBinding>() {
     override var data = listOf<Product>()
 
     override fun createViewHolder(
@@ -28,7 +25,7 @@ class ProductListAdapter(
 
     class ProductViewHolder(
         private val binding: ProductlistItemBinding,
-        private val viewModelDetail: ShoppingListDetailViewModel
+        private val viewModelDetail: ListDetailViewModel
     ) : ItemViewHolder<Product, ProductlistItemBinding>(binding) {
 
         override fun bind(item: Product) = with(binding) {

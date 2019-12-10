@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class ListBindingAdapter<T, B : ViewDataBinding>
-    : RecyclerView.Adapter<ListBindingAdapter.ItemViewHolder<T, B>>() {
+abstract class BaseListBindingAdapter<T, B : ViewDataBinding>
+    : RecyclerView.Adapter<BaseListBindingAdapter.ItemViewHolder<T, B>>() {
     abstract var data: List<T>
 
     override fun onCreateViewHolder(

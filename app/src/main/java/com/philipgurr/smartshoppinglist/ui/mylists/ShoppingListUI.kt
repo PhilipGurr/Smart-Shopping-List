@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.shoppinglist
+package com.philipgurr.smartshoppinglist.ui.mylists
 
 data class ShoppingListUI(
     val name: String,

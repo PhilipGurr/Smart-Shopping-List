@@ -11,7 +11,7 @@ import com.philipgurr.smartshoppinglist.domain.usecases.AddListUseCase
 import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
 import com.philipgurr.smartshoppinglist.repository.Repository
 import com.philipgurr.smartshoppinglist.util.extensions.toId
-import com.philipgurr.smartshoppinglist.vm.ShoppingListViewModel
+import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -26,14 +26,14 @@ import java.util.concurrent.TimeUnit
 
 private const val SHOPPING_LIST_NAME = "Test Shopping List"
 
-class ShoppingListViewModelTest {
+class MyListsViewModelTest {
     @get:Rule
     val instantTaskRule = InstantTaskExecutorRule()
 
     private val repository: Repository = mock()
     private val shoppingListsUseCase = GetListsUseCase(repository)
     private val addListsUseCase = AddListUseCase(repository)
-    private val viewModel = ShoppingListViewModel(shoppingListsUseCase, addListsUseCase)
+    private val viewModel = MyListsViewModel(shoppingListsUseCase, addListsUseCase)
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)

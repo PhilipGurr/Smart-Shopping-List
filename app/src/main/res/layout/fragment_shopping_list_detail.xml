@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel" />
+            type="com.philipgurr.smartshoppinglist.vm.ListDetailViewModel" />
     </data>
 
     <LinearLayout
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.shoppinglist.detail.ShoppingListDetailFragment">
+        tools:context=".ui.detail.ListDetailFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

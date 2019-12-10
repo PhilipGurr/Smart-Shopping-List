@@ -1,15 +1,15 @@
-package com.philipgurr.smartshoppinglist.ui.addproduct
+package com.philipgurr.smartshoppinglist.ui.detail.addproduct
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.philipgurr.smartshoppinglist.databinding.AddProductChoiceItemBinding
 import com.philipgurr.smartshoppinglist.productinput.ProductInputMethod
-import com.philipgurr.smartshoppinglist.ui.ListBindingAdapter
+import com.philipgurr.smartshoppinglist.ui.BaseListBindingAdapter
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
-class ProductChoiceAdapter(
+class ProductChoiceListAdapter(
     private val onClick: (String) -> Unit
-) : ListBindingAdapter<String, AddProductChoiceItemBinding>() {
+) : BaseListBindingAdapter<String, AddProductChoiceItemBinding>() {
     override var data = listOf(
         ProductInputMethod.TEXT_INPUT_METHOD,
         ProductInputMethod.BARCODE_INPUT_METHOD

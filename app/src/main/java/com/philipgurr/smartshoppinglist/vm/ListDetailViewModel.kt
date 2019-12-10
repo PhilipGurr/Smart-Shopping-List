@@ -11,7 +11,7 @@ import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ShoppingListDetailViewModel @Inject constructor(
+class ListDetailViewModel @Inject constructor(
     private val getListsUseCase: GetListsUseCase,
     private val addProductUseCase: AddProductUseCase
 ) : ViewModel() {

@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.shoppinglist.detail
+package com.philipgurr.smartshoppinglist.ui.detail
 
 
 import android.os.Bundle
@@ -13,19 +13,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
-import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListToUIMapper
-import com.philipgurr.smartshoppinglist.ui.shoppinglist.ShoppingListUI
-import com.philipgurr.smartshoppinglist.vm.ShoppingListDetailViewModel
+import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import javax.inject.Inject
 
-class ShoppingListDetailFragment : DaggerFragment() {
+class ListDetailFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(ShoppingListDetailViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -46,7 +44,7 @@ class ShoppingListDetailFragment : DaggerFragment() {
 
     private fun parseArguments() {
         arguments?.let { bundle ->
-            val safeArgs = ShoppingListDetailFragmentArgs.fromBundle(bundle)
+            val safeArgs = ListDetailFragmentArgs.fromBundle(bundle)
             viewModel.listName = safeArgs.shoppingList.name
         }
     }

@@ -1,6 +1,5 @@
-package com.philipgurr.smartshoppinglist.ui.shoppinglist
+package com.philipgurr.smartshoppinglist.ui.mylists
 
-import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.Mapper
 import com.philipgurr.smartshoppinglist.util.ProgressBarColorPicker
