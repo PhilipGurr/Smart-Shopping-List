@@ -10,6 +10,10 @@ class GetListsUseCase @Inject constructor(
     private val repository: Repository
 ) {
 
+    suspend fun getShoppingList(name: String) = withContext(Dispatchers.Default) {
+        repository.getList(name)
+    }
+
     suspend fun getShoppingLists() = withContext(Dispatchers.Default) {
         repository.getAllLists().sortedBy { it.created }
     }
