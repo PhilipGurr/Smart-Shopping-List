@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
+import com.philipgurr.smartshoppinglist.vm.ImageRecognitionViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class CameraFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(ImageRecognitionViewModel::class.java)
     }
 
     override fun onCreateView(
