@@ -9,25 +9,26 @@ import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.CameraX
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
+import androidx.camera.core.*
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
-
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.vm.ImageRecognitionViewModel
+import com.philipgurr.smartshoppinglist.util.extensions.toBitmap
+import com.philipgurr.smartshoppinglist.vm.CameraViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class CameraFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(ImageRecognitionViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(CameraViewModel::class.java)
     }
+    private val imageAnalysisExecutor = Executors.newSingleThreadExecutor()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +40,10 @@ class CameraFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewFinder.post { startCamera() }
+
+        viewModel.recognizedBarcodeData.observe(this, Observer {
+
+        })
     }
 
     private fun startCamera() = runWithPermissions(Manifest.permission.CAMERA) {
@@ -57,7 +62,25 @@ class CameraFragment : DaggerFragment() {
             compensateOrientationInViewFinder()
         }
 
-        CameraX.bindToLifecycle(this, preview)
+        CameraX.bindToLifecycle(this, setupImageAnalyser(), preview)
+    }
+
+    private fun setupImageAnalyser(): ImageAnalysis {
+        val config = ImageAnalysisConfig.Builder()
+            .setTargetResolution(Size(1280, 720))
+            .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
+            .build()
+        val analysis = ImageAnalysis(config)
+        analysis.setAnalyzer(
+            imageAnalysisExecutor,
+            ImageAnalysis.Analyzer { imageProxy: ImageProxy, rotationDegrees: Int ->
+                val bitmap = imageProxy.image?.toBitmap()
+                bitmap?.let {
+                    viewModel.recognizeBarcode(bitmap, rotationDegrees)
+                }
+            })
+
+        return analysis
     }
 
     private fun compensateOrientationInViewFinder() {

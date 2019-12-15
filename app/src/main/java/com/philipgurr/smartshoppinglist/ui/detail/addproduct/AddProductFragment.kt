@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.productinput.ProductInputMethod
-import com.philipgurr.smartshoppinglist.productinput.processors.TextInputMethod
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_add_product.*
@@ -55,14 +54,12 @@ class AddProductFragment : DaggerFragment() {
     }
 
     private fun addProductByText() {
-        val inputMethod = TextInputMethod()
         alert("New Product") {
             customView {
                 val name = editText { hint = "Enter..." }
                 okButton {
                     val text = name.text.toString()
-                    val newProduct = inputMethod.process(text)
-                    viewModel.insertProduct(newProduct)
+                    viewModel.insertProduct(text)
                 }
             }
         }.show()

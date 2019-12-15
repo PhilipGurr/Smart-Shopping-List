@@ -25,6 +25,10 @@ class ListDetailViewModel @Inject constructor(
         }
     }
 
+    fun insertProduct(name: String) {
+        insertProduct(Product(name))
+    }
+
     fun insertProduct(product: Product) {
         viewModelScope.launch {
             addProductUseCase.add(listName, product)

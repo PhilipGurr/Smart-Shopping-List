@@ -3,15 +3,12 @@ package com.philipgurr.smartshoppinglist.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.philipgurr.smartshoppinglist.di.ViewModelKey
-import com.philipgurr.smartshoppinglist.vm.CompletedListsViewModel
-import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
-import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
-import com.philipgurr.smartshoppinglist.vm.ViewModelFactory
+import com.philipgurr.smartshoppinglist.vm.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
-@Module
+@Module(includes = [InputMethodModule::class])
 abstract class ViewModelModule {
     @Binds
     @IntoMap
@@ -27,6 +24,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ListDetailViewModel::class)
     abstract fun bindShoppingListDetailViewModel(viewModel: ListDetailViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CameraViewModel::class)
+    abstract fun bindCameraViewModel(viewModel: CameraViewModel): ViewModel
 
     @Binds
     abstract fun bindFactory(factory: ViewModelFactory): ViewModelProvider.Factory

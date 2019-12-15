@@ -9,15 +9,18 @@ import com.philipgurr.smartshoppinglist.domain.usecases.RecognizeBarcodeUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ImageRecognitionViewModel @Inject constructor(
+class CameraViewModel @Inject constructor(
     private val recognizeBarcodeUseCase: RecognizeBarcodeUseCase
 ) : ViewModel() {
     private val _recognizedBarcodeData = MutableLiveData<String>()
     val recognizedBarcodeData: LiveData<String> = _recognizedBarcodeData
 
-    fun recognizeBarcode(image: Bitmap) {
+    fun recognizeBarcode(bitmap: Bitmap, rotation: Int) {
         viewModelScope.launch {
-            _recognizedBarcodeData.value = recognizeBarcodeUseCase.recognize(image)
+            val barcodeText = recognizeBarcodeUseCase.recognize(bitmap, rotation)
+            if (barcodeText.isNotEmpty()) {
+                _recognizedBarcodeData.value = barcodeText
+            }
         }
     }
 }
