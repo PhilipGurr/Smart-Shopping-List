@@ -1,6 +1,6 @@
 package com.philipgurr.smartshoppinglist.repository
 
-import com.philipgurr.smartshoppinglist.datasource.ShoppingListDatasource
+import com.philipgurr.smartshoppinglist.data.database.ShoppingListDatasource
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.util.extensions.toId
@@ -26,9 +26,9 @@ class ShoppingListRepository @Inject constructor(
     }
 
     override suspend fun getProducts(shoppingListName: String) =
-        shoppingListDatasource.getSubItems(shoppingListName.toId())
+        shoppingListDatasource.getProduct(shoppingListName.toId())
 
     override suspend fun addProduct(shoppingListName: String, value: Product) {
-        shoppingListDatasource.insertSubItem(shoppingListName.toId(), value)
+        shoppingListDatasource.insertProduct(shoppingListName.toId(), value)
     }
 }

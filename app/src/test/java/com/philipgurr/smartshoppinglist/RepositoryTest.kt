@@ -2,7 +2,7 @@ package com.philipgurr.smartshoppinglist
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import com.philipgurr.smartshoppinglist.datasource.ShoppingListDatasource
+import com.philipgurr.smartshoppinglist.data.database.ShoppingListDatasource
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
