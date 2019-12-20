@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.datasource
+package com.philipgurr.smartshoppinglist.data.database
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.philipgurr.smartshoppinglist.domain.Product
@@ -64,9 +64,9 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
         values.forEach { insert(it) }
     }
 
-    override suspend fun getSubItems(shoppingListName: String) = getProducts(shoppingListName)
+    override suspend fun getProduct(shoppingListName: String) = getProducts(shoppingListName)
 
-    override suspend fun insertSubItem(shoppingListId: String, value: Product) {
+    override suspend fun insertProduct(shoppingListId: String, value: Product) {
         addProducts(shoppingListId, value)
     }
 

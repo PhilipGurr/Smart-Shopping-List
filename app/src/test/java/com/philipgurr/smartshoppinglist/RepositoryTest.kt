@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.philipgurr.smartshoppinglist.data.database.ShoppingListDatasource
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
+import com.philipgurr.smartshoppinglist.repository.StandardShoppingListRepository
 import com.philipgurr.smartshoppinglist.util.extensions.toId
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -16,7 +16,7 @@ private const val SHOPPING_LIST_NAME = "Test Shopping List"
 
 class RepositoryTest {
     private val shoppingListDatasource: ShoppingListDatasource = mock()
-    private val repository = ShoppingListRepository(shoppingListDatasource)
+    private val repository = StandardShoppingListRepository(shoppingListDatasource)
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)

@@ -4,6 +4,7 @@ package com.philipgurr.smartshoppinglist.ui.detail.addproduct
 import android.Manifest
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.Surface
@@ -19,6 +20,11 @@ import com.philipgurr.smartshoppinglist.util.extensions.toBitmap
 import com.philipgurr.smartshoppinglist.vm.CameraViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
+import org.jetbrains.anko.cancelButton
+import org.jetbrains.anko.customView
+import org.jetbrains.anko.editText
+import org.jetbrains.anko.okButton
+import org.jetbrains.anko.support.v4.alert
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -29,6 +35,7 @@ class CameraFragment : DaggerFragment() {
         ViewModelProviders.of(activity!!, factory).get(CameraViewModel::class.java)
     }
     private val imageAnalysisExecutor = Executors.newSingleThreadExecutor()
+    private lateinit var useCase: UseCase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +48,11 @@ class CameraFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewFinder.post { startCamera() }
 
-        viewModel.recognizedBarcodeData.observe(this, Observer {
-
+        viewModel.recognizedProduct.observe(this, Observer {
+            addProduct(it.name)
+        })
+        viewModel.barcodeNotFound.observe(this, Observer {
+            productNotFound(it)
         })
     }
 
@@ -79,7 +89,6 @@ class CameraFragment : DaggerFragment() {
                     viewModel.recognizeBarcode(bitmap, rotationDegrees)
                 }
             })
-
         return analysis
     }
 
@@ -99,5 +108,26 @@ class CameraFragment : DaggerFragment() {
         matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
 
         viewFinder.setTransform(matrix)
+    }
+
+    private fun addProduct(productName: String) {
+        alert("Add Product") {
+            customView {
+                val name = editText { setText(productName) }
+                okButton {
+                    val text = name.text.toString()
+                    Log.d("CameraFragment", text)
+                    viewModel.recognizerRunning = false
+                }
+                cancelButton { viewModel.recognizerRunning = false }
+            }
+        }.show()
+    }
+
+    private fun productNotFound(message: String) {
+        Log.d("CameraFragment", message)
+        alert(message) {
+            okButton { viewModel.recognizerRunning = false }
+        }.show()
     }
 }

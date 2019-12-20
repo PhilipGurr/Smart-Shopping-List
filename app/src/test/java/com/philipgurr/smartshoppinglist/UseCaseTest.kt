@@ -5,14 +5,14 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
-import com.philipgurr.smartshoppinglist.repository.Repository
-import junit.framework.Assert.assertEquals
+import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
 
 class UseCaseTest {
-    private val repository: Repository = mock()
+    private val repository: ShoppingListRepository = mock()
 
     private val testProduct = Product("Banana", false)
     private val testProduct2 = Product("Strawberry Jam", true)

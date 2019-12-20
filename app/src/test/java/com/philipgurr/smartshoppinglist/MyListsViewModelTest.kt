@@ -9,7 +9,7 @@ import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.domain.usecases.AddListUseCase
 import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
-import com.philipgurr.smartshoppinglist.repository.Repository
+import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
 import com.philipgurr.smartshoppinglist.util.extensions.toId
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +30,7 @@ class MyListsViewModelTest {
     @get:Rule
     val instantTaskRule = InstantTaskExecutorRule()
 
-    private val repository: Repository = mock()
+    private val repository: ShoppingListRepository = mock()
     private val shoppingListsUseCase = GetListsUseCase(repository)
     private val addListsUseCase = AddListUseCase(repository)
     private val viewModel = MyListsViewModel(shoppingListsUseCase, addListsUseCase)
