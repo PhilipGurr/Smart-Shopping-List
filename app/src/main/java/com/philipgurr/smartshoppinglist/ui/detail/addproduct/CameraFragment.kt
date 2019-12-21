@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.util.extensions.toBitmap
-import com.philipgurr.smartshoppinglist.vm.CameraViewModel
+import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 import org.jetbrains.anko.cancelButton
@@ -32,7 +32,7 @@ class CameraFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(CameraViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
     }
     private val imageAnalysisExecutor = Executors.newSingleThreadExecutor()
     private lateinit var useCase: UseCase
@@ -116,8 +116,9 @@ class CameraFragment : DaggerFragment() {
                 val name = editText { setText(productName) }
                 okButton {
                     val text = name.text.toString()
-                    Log.d("CameraFragment", text)
                     viewModel.recognizerRunning = false
+                    Log.d("CameraFragment", text)
+                    viewModel.insertProduct(text)
                 }
                 cancelButton { viewModel.recognizerRunning = false }
             }
