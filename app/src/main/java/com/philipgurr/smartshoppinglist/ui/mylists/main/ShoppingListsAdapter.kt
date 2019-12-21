@@ -8,7 +8,7 @@ import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.ui.BaseListBindingAdapter
 import com.philipgurr.smartshoppinglist.ui.mylists.ShoppingListToUIMapper
 
-class MyListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistItemBinding>() {
+class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistItemBinding>() {
     override var data = listOf<ShoppingList>()
 
     override fun createViewHolder(

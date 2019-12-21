@@ -28,7 +28,7 @@ class MyListsFragment : DaggerFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val shoppingListAdapter =
-        MyListsAdapter()
+        ShoppingListsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
