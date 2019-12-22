@@ -52,7 +52,12 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
         })
 
         swipeRefreshMyLists.setOnRefreshListener(this)
-        swipeRefreshMyLists.post { onRefresh() }
+
+        // Load data only if nothing is loaded so far to avoid unnecessary API calls
+        // while navigating
+        if (viewModel.shoppingLists.value == null) {
+            swipeRefreshMyLists.post { onRefresh() }
+        }
 
         fab_add_list.onClick {
             createNewShoppingList()

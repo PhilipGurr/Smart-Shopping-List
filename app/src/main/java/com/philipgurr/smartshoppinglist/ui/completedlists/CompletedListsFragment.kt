@@ -47,7 +47,12 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
         })
 
         swipeRefreshCompletedLists.setOnRefreshListener(this)
-        swipeRefreshCompletedLists.post { onRefresh() }
+
+        // Load data only if nothing is loaded so far to avoid unnecessary API calls
+        // while navigating
+        if (viewModel.completedLists.value == null) {
+            swipeRefreshCompletedLists.post { onRefresh() }
+        }
     }
 
     private fun setupRecyclerView() {

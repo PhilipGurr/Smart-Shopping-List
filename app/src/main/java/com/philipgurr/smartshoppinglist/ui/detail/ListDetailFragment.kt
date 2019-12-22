@@ -35,19 +35,9 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        parseArguments()
-
         productListAdapter = ProductListAdapter(viewModel)
-
         binding = setUpDataBinding(inflater, container)
         return binding.root
-    }
-
-    private fun parseArguments() {
-        arguments?.let { bundle ->
-            val safeArgs = ListDetailFragmentArgs.fromBundle(bundle)
-            viewModel.listName = safeArgs.shoppingList.name
-        }
     }
 
     private fun setUpDataBinding(
@@ -78,7 +68,8 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         })
 
         swipeRefreshDetail.setOnRefreshListener(this)
-        swipeRefreshDetail.post { onRefresh() }
+
+        parseArguments()
     }
 
     private fun setupRecyclerView() {
@@ -92,6 +83,23 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
             findNavController().navigate(R.id.nav_add_product_fragment)
         }
     }
+
+    private fun parseArguments() {
+        arguments?.let { bundle ->
+            val safeArgs = ListDetailFragmentArgs.fromBundle(bundle)
+            val listName = safeArgs.shoppingList.name
+
+            // Load data only if nothing is loaded so far to avoid unnecessary API calls
+            // while navigating
+            if (shouldReloadData(listName)) {
+                viewModel.listName = listName
+                swipeRefreshDetail.post { onRefresh() }
+            }
+        }
+    }
+
+    private fun shouldReloadData(listName: String) =
+        viewModel.shoppingList.value == null || viewModel.listName != listName
 
     override fun onRefresh() {
         swipeRefreshDetail.isRefreshing = true
