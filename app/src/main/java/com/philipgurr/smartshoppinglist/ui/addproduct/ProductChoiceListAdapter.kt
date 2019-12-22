@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.detail.addproduct
+package com.philipgurr.smartshoppinglist.ui.addproduct
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

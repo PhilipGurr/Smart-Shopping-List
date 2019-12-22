@@ -24,7 +24,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
+        ViewModelProviders.of(this, factory).get(ListDetailViewModel::class.java)
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -35,9 +35,18 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        parseArguments()
         productListAdapter = ProductListAdapter(viewModel)
         binding = setUpDataBinding(inflater, container)
         return binding.root
+    }
+
+    private fun parseArguments() {
+        arguments?.let { bundle ->
+            val safeArgs = ListDetailFragmentArgs.fromBundle(bundle)
+            val listName = safeArgs.shoppingList.name
+            viewModel.listName = listName
+        }
     }
 
     private fun setUpDataBinding(
@@ -68,8 +77,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         })
 
         swipeRefreshDetail.setOnRefreshListener(this)
-
-        parseArguments()
+        swipeRefreshDetail.post { onRefresh() }
     }
 
     private fun setupRecyclerView() {
@@ -80,21 +88,11 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
 
     private fun setupFab() {
         fab_add_product.onClick {
-            findNavController().navigate(R.id.nav_add_product_fragment)
-        }
-    }
-
-    private fun parseArguments() {
-        arguments?.let { bundle ->
-            val safeArgs = ListDetailFragmentArgs.fromBundle(bundle)
-            val listName = safeArgs.shoppingList.name
-
-            // Load data only if nothing is loaded so far to avoid unnecessary API calls
-            // while navigating
-            if (shouldReloadData(listName)) {
-                viewModel.listName = listName
-                swipeRefreshDetail.post { onRefresh() }
-            }
+            val actionAdd =
+                ListDetailFragmentDirections.actionNavShoppingListDetailToAddProductFragment(
+                    viewModel.shoppingList.value!!
+                )
+            findNavController().navigate(actionAdd)
         }
     }
 

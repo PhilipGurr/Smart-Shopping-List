@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.detail.addproduct
+package com.philipgurr.smartshoppinglist.ui.addproduct
 
 
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.productinput.ProductInputMethod
-import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
+import com.philipgurr.smartshoppinglist.vm.AddProductViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_add_product.*
 import org.jetbrains.anko.customView
@@ -24,7 +24,7 @@ class AddProductFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(AddProductViewModel::class.java)
     }
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var choiceListAdapter: ProductChoiceListAdapter
@@ -33,7 +33,16 @@ class AddProductFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        parseArguments()
         return inflater.inflate(R.layout.fragment_add_product, container, false)
+    }
+
+    private fun parseArguments() {
+        arguments?.let { bundle ->
+            val safeArgs = AddProductFragmentArgs.fromBundle(bundle)
+            val listName = safeArgs.shoppingList.name
+            viewModel.listName = listName
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
