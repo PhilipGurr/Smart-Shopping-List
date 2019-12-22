@@ -8,65 +8,70 @@
             type="com.philipgurr.smartshoppinglist.vm.ListDetailViewModel" />
     </data>
 
-    <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshDetail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.detail.ListDetailFragment">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <LinearLayout xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".ui.detail.ListDetailFragment">
 
-            <TextView
-                android:id="@+id/shoppingListNameDetail"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.shoppingList.name}"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/shoppingListProgressDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{@string/progress(viewModel.shoppingList.completedProducts().size, viewModel.shoppingList.products.size)}"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/shoppingListNameDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{viewModel.shoppingList.name}"
+                    android:textColor="@color/black"
+                    android:textSize="30sp" />
 
-            <ProgressBar
-                android:id="@+id/shoppingListProgressBarDetail"
+                <TextView
+                    android:id="@+id/shoppingListProgressDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{@string/progress(viewModel.shoppingList.completedProducts().size, viewModel.shoppingList.products.size)}"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <ProgressBar
+                    android:id="@+id/shoppingListProgressBarDetail"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="12sp"
+                    android:indeterminate="false"
+                    android:max="@{viewModel.shoppingList.products.size}"
+                    android:progress="@{viewModel.shoppingList.completedProducts().size}"
+                    android:progressBackgroundTint="@color/colorPrimaryDark"
+                    android:progressTint="@color/colorPrimary" />
+            </LinearLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_height="12sp"
-                android:indeterminate="false"
-                android:progressBackgroundTint="@color/colorPrimaryDark"
-                android:progressTint="@color/colorPrimary"
-                android:max="@{viewModel.shoppingList.products.size}"
-                android:progress="@{viewModel.shoppingList.completedProducts().size}" />
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productListRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/productlist_item" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_add_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    app:srcCompat="@android:drawable/ic_dialog_email" />
+            </FrameLayout>
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productListRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/productlist_item" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_add_product"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                app:srcCompat="@android:drawable/ic_dialog_email" />
-        </FrameLayout>
-    </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

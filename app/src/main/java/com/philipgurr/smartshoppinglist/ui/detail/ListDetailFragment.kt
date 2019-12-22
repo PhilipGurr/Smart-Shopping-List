@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import javax.inject.Inject
 
-class ListDetailFragment : DaggerFragment() {
+class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
@@ -72,7 +73,12 @@ class ListDetailFragment : DaggerFragment() {
         viewModel.shoppingList.observe(this, Observer { list ->
             productListAdapter.data = list.products
             productListAdapter.notifyDataSetChanged()
+
+            swipeRefreshDetail.isRefreshing = false
         })
+
+        swipeRefreshDetail.setOnRefreshListener(this)
+        swipeRefreshDetail.post { onRefresh() }
     }
 
     private fun setupRecyclerView() {
@@ -87,8 +93,8 @@ class ListDetailFragment : DaggerFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onRefresh() {
+        swipeRefreshDetail.isRefreshing = true
         viewModel.loadShoppingList()
     }
 }

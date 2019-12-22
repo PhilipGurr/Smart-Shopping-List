@@ -8,7 +8,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
+import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
@@ -19,7 +21,7 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
 
-class MyListsFragment : DaggerFragment() {
+class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
@@ -45,11 +47,27 @@ class MyListsFragment : DaggerFragment() {
         viewModel.shoppingLists.observe(this, Observer { shoppingLists ->
             shoppingListAdapter.data = shoppingLists
             shoppingListAdapter.notifyDataSetChanged()
+
+            swipeRefreshMyLists.isRefreshing = false
         })
+
+        swipeRefreshMyLists.setOnRefreshListener(this)
+        swipeRefreshMyLists.post { onRefresh() }
 
         fab_add_list.onClick {
             createNewShoppingList()
         }
+    }
+
+    private fun setupRecyclerView() {
+        linearLayoutManager = LinearLayoutManager(context)
+        myListsRecyclerView.layoutManager = linearLayoutManager
+        myListsRecyclerView.adapter = shoppingListAdapter
+    }
+
+    override fun onRefresh() {
+        swipeRefreshMyLists.isRefreshing = true
+        viewModel.loadShoppingLists()
     }
 
     private fun createNewShoppingList() {
@@ -62,16 +80,5 @@ class MyListsFragment : DaggerFragment() {
                 }
             }
         }.show()
-    }
-
-    private fun setupRecyclerView() {
-        linearLayoutManager = LinearLayoutManager(context)
-        myListsRecyclerView.layoutManager = linearLayoutManager
-        myListsRecyclerView.adapter = shoppingListAdapter
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadShoppingLists()
     }
 }

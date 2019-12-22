@@ -8,14 +8,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.ui.mylists.main.ShoppingListsAdapter
+import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
 import com.philipgurr.smartshoppinglist.vm.CompletedListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_completed_list.*
 import javax.inject.Inject
 
-class CompletedListsFragment : DaggerFragment() {
+class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
@@ -41,7 +42,12 @@ class CompletedListsFragment : DaggerFragment() {
         viewModel.completedLists.observe(this, Observer { shoppingLists ->
             shoppingListAdapter.data = shoppingLists
             shoppingListAdapter.notifyDataSetChanged()
+
+            swipeRefreshCompletedLists.isRefreshing = false
         })
+
+        swipeRefreshCompletedLists.setOnRefreshListener(this)
+        swipeRefreshCompletedLists.post { onRefresh() }
     }
 
     private fun setupRecyclerView() {
@@ -50,8 +56,8 @@ class CompletedListsFragment : DaggerFragment() {
         completedListsRecyclerView.adapter = shoppingListAdapter
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onRefresh() {
+        swipeRefreshCompletedLists.isRefreshing = true
         viewModel.loadShoppingLists()
     }
 }
