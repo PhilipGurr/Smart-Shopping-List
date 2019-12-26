@@ -14,7 +14,9 @@
             android:title="@string/menu_completed_lists" />
     </group>
 
-    <item android:title="Another Group">
-    </item>
+    <item
+        android:id="@+id/nav_signout"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/signout" />
 
 </menu>

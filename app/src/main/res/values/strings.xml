@@ -19,4 +19,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_product">Add Product</string>
+    <string name="login_button">Login</string>
+    <string name="login_textview">Log in with your Google Account to access your Shopping Lists on other devices too!</string>
+    <string name="signout">Sign out</string>
 </resources>
