@@ -1,5 +1,6 @@
 package com.philipgurr.smartshoppinglist.data.database
 
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.domain.ShoppingList
@@ -15,14 +16,21 @@ private const val SHOPPING_LISTS_COLLECTION_ID = "shoppinglists"
 private const val PRODUCT_LISTS_COLLECTION_ID = "products"
 
 class FirebaseCloudShoppingListDatasource @Inject constructor(
-    database: FirebaseFirestore
+    private val database: FirebaseFirestore,
+    private val userManager: UserManager
 ) : ShoppingListDatasource {
-    private val shoppingListCollection = database
-        .collection(USER_LISTS_COLLECTION_ID)
-        .document("test")
-        .collection(SHOPPING_LISTS_COLLECTION_ID)
+    private var currentUser = userManager.getCurrentUser()
+    private lateinit var shoppingListCollection: CollectionReference
+
+    private fun getShoppingListCollectionForCurrentUser() {
+        shoppingListCollection = database
+            .collection(USER_LISTS_COLLECTION_ID)
+            .document(userManager.getCurrentUser())
+            .collection(SHOPPING_LISTS_COLLECTION_ID)
+    }
 
     override suspend fun get(name: String) = withContext(Dispatchers.IO) {
+        getShoppingListCollectionForCurrentUser()
         getShoppingList(name)
     }
 
@@ -42,6 +50,7 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
             .parse<Product>()
 
     override suspend fun getAll() = withContext(Dispatchers.IO) {
+        getShoppingListCollectionForCurrentUser()
         val snapshots = shoppingListCollection.get().await()
         val shoppingLists = mutableListOf<ShoppingList>()
 
@@ -54,6 +63,7 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
     }
 
     override suspend fun insert(value: ShoppingList) {
+        getShoppingListCollectionForCurrentUser()
         withContext(Dispatchers.IO) {
             shoppingListCollection.document(value.id).set(value)
             addProducts(value.id, *value.products.toTypedArray())
@@ -61,12 +71,17 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
     }
 
     override suspend fun insertAll(values: List<ShoppingList>) {
+        getShoppingListCollectionForCurrentUser()
         values.forEach { insert(it) }
     }
 
-    override suspend fun getProduct(shoppingListName: String) = getProducts(shoppingListName)
+    override suspend fun getAllProduct(shoppingListName: String): List<Product> {
+        getShoppingListCollectionForCurrentUser()
+        return getProducts(shoppingListName)
+    }
 
     override suspend fun insertProduct(shoppingListId: String, value: Product) {
+        getShoppingListCollectionForCurrentUser()
         addProducts(shoppingListId, value)
     }
 

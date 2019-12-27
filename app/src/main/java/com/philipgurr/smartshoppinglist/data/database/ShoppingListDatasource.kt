@@ -8,6 +8,6 @@ interface ShoppingListDatasource {
     suspend fun getAll(): List<ShoppingList>
     suspend fun insert(value: ShoppingList)
     suspend fun insertAll(values: List<ShoppingList>)
-    suspend fun getProduct(shoppingListName: String): List<Product>
+    suspend fun getAllProduct(shoppingListName: String): List<Product>
     suspend fun insertProduct(shoppingListId: String, value: Product)
 }

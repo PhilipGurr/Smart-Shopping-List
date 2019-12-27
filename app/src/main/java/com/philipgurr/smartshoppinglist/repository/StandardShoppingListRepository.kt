@@ -26,7 +26,7 @@ class StandardShoppingListRepository @Inject constructor(
     }
 
     override suspend fun getProducts(shoppingListName: String) =
-        shoppingListDatasource.getProduct(shoppingListName.toId())
+        shoppingListDatasource.getAllProduct(shoppingListName.toId())
 
     override suspend fun addProduct(shoppingListName: String, value: Product) {
         shoppingListDatasource.insertProduct(shoppingListName.toId(), value)

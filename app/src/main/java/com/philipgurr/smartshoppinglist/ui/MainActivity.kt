@@ -89,11 +89,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun removeNavigationHeader() {
-        if (nav_view.headerCount > 0) {
+    private fun removeNavigationHeader() {
+        if (navigationHasHeaders()) {
             nav_view.removeHeaderView(nav_view.getHeaderView(0))
         }
     }
+
+    private fun navigationHasHeaders() = nav_view.headerCount > 0
 
     private fun login() {
         val providers = arrayListOf(
@@ -114,8 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == Activity.RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser
-                showUserDetails(user)
+                setupNavigationHeader()
             }
         }
     }
