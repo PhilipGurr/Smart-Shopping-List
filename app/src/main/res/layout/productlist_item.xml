@@ -4,7 +4,7 @@
     <data>
         <variable
             name="product"
-            type="com.philipgurr.smartshoppinglist.domain.Product" />
+            type="com.philipgurr.domain.Product" />
         <variable
             name="viewModel"
             type="com.philipgurr.smartshoppinglist.vm.ListDetailViewModel" />

@@ -8,7 +8,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
-@Module(includes = [InputMethodModule::class])
+@Module
 abstract class ViewModelModule {
     @Binds
     @IntoMap

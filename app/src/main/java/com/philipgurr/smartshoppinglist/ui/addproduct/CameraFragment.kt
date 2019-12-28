@@ -15,8 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.util.extensions.toBitmap
+import com.philipgurr.smartshoppinglist.util.extensions.YUV_420_888toNV21
 import com.philipgurr.smartshoppinglist.vm.AddProductViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -84,10 +85,13 @@ class CameraFragment : DaggerFragment() {
         analysis.setAnalyzer(
             imageAnalysisExecutor,
             ImageAnalysis.Analyzer { imageProxy: ImageProxy, rotationDegrees: Int ->
-                val bitmap = imageProxy.image?.toBitmap()
-                bitmap?.let {
-                    viewModel.recognizeBarcode(bitmap, rotationDegrees)
-                }
+                val recognitionImage = RecognitionImage(
+                    imageProxy.width,
+                    imageProxy.height,
+                    YUV_420_888toNV21(imageProxy),
+                    rotationDegrees
+                )
+                viewModel.recognizeBarcode(recognitionImage)
             })
         return analysis
     }

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.domain.usecases.GetCompletedListsUseCase
+import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.usecases.GetCompletedListsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

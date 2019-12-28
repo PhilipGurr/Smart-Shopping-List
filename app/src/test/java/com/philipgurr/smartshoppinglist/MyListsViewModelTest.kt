@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import com.philipgurr.smartshoppinglist.domain.Product
-import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.domain.usecases.AddListUseCase
-import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
-import com.philipgurr.smartshoppinglist.repository.ShoppingListRepository
-import com.philipgurr.smartshoppinglist.util.extensions.toId
+import com.philipgurr.domain.Product
+import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.repository.ShoppingListRepository
+import com.philipgurr.domain.usecases.AddListUseCase
+import com.philipgurr.domain.usecases.GetListsUseCase
+import com.philipgurr.domain.util.toId
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -36,7 +36,8 @@ class MyListsViewModelTest {
     private val viewModel = MyListsViewModel(shoppingListsUseCase, addListsUseCase)
 
     private val testProduct = Product("Banana", false)
-    private val testProduct2 = Product("Strawberry Jam", true)
+    private val testProduct2 =
+        Product("Strawberry Jam", true)
     private val testShoppingList = ShoppingList(
         SHOPPING_LIST_NAME.toId(),
         SHOPPING_LIST_NAME,

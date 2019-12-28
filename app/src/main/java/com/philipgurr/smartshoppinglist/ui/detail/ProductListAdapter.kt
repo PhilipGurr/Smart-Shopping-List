@@ -3,9 +3,9 @@ package com.philipgurr.smartshoppinglist.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.philipgurr.domain.Product
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.ProductlistItemBinding
-import com.philipgurr.smartshoppinglist.domain.Product
 import com.philipgurr.smartshoppinglist.ui.BaseListBindingAdapter
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 

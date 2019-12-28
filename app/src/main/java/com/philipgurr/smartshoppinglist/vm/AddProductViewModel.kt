@@ -1,15 +1,15 @@
 package com.philipgurr.smartshoppinglist.vm
 
-import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.philipgurr.smartshoppinglist.data.api.BarcodeNotFoundException
-import com.philipgurr.smartshoppinglist.domain.Product
-import com.philipgurr.smartshoppinglist.domain.usecases.AddProductUseCase
-import com.philipgurr.smartshoppinglist.domain.usecases.GetProductFromBarcodeUseCase
-import com.philipgurr.smartshoppinglist.domain.usecases.RecognizeBarcodeUseCase
+import com.philipgurr.data.api.BarcodeNotFoundException
+import com.philipgurr.domain.Product
+import com.philipgurr.domain.RecognitionImage
+import com.philipgurr.domain.usecases.AddProductUseCase
+import com.philipgurr.domain.usecases.GetProductFromBarcodeUseCase
+import com.philipgurr.domain.usecases.RecognizeBarcodeUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,11 +35,11 @@ class AddProductViewModel @Inject constructor(
         }
     }
 
-    fun recognizeBarcode(bitmap: Bitmap, rotation: Int) {
+    fun recognizeBarcode(image: RecognitionImage) {
         if (recognizerRunning) return
         recognizerRunning = true
         viewModelScope.launch {
-            val barcode = recognizeBarcodeUseCase.recognize(bitmap, rotation)
+            val barcode = recognizeBarcodeUseCase.recognize(image)
             if (barcode.isNotEmpty()) {
                 try {
                     _recognizedProduct.value = getProductFromBarcodeUseCase.getProduct(barcode)

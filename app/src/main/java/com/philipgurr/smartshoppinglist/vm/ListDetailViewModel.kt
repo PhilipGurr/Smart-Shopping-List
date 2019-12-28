@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.philipgurr.smartshoppinglist.domain.Product
-import com.philipgurr.smartshoppinglist.domain.ShoppingList
-import com.philipgurr.smartshoppinglist.domain.usecases.AddProductUseCase
-import com.philipgurr.smartshoppinglist.domain.usecases.GetListsUseCase
+import com.philipgurr.domain.Product
+import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.usecases.AddProductUseCase
+import com.philipgurr.domain.usecases.GetListsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +27,8 @@ class ListDetailViewModel @Inject constructor(
 
     fun toggleCompleted(product: Product) {
         viewModelScope.launch {
-            val newProduct = Product(product.name, !product.completed)
+            val newProduct =
+                Product(product.name, !product.completed)
             insertProduct(newProduct) // TODO: Create use case for setting product as completed instead of using insert
         }
     }

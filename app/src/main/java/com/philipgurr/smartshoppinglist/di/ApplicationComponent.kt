@@ -1,7 +1,8 @@
 package com.philipgurr.smartshoppinglist.di
 
+import com.philipgurr.data.di.DataComponent
 import com.philipgurr.smartshoppinglist.App
-import com.philipgurr.smartshoppinglist.di.modules.*
+import com.philipgurr.smartshoppinglist.di.modules.AndroidModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -12,17 +13,19 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
-        AndroidModule::class,
-        ContextModule::class,
-        RepositoryModule::class,
-        DatasourceModule::class,
-        FirebaseModule::class,
-        ApiModule::class
+        AndroidModule::class
+    ],
+    dependencies = [
+        DataComponent::class
     ]
 )
 interface ApplicationComponent : AndroidInjector<App> {
-    @Component.Factory
-    interface Factory : AndroidInjector.Factory<App> {
-        override fun create(@BindsInstance app: App): ApplicationComponent
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun application(app: App): Builder
+
+        fun dataComponent(dataComponent: DataComponent): Builder
+        fun build(): ApplicationComponent
     }
 }

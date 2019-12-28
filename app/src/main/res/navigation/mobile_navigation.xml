@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_shopping_list_detail" >
         <argument
             android:name="shoppingList"
-            app:argType="com.philipgurr.smartshoppinglist.domain.ShoppingList" />
+            app:argType="com.philipgurr.domain.ShoppingList" />
         <action
             android:id="@+id/action_nav_shopping_list_detail_to_addProductFragment"
             app:destination="@id/nav_add_product_fragment" />
@@ -38,7 +38,7 @@
         android:label="Add Product" >
         <argument
             android:name="shoppingList"
-            app:argType="com.philipgurr.smartshoppinglist.domain.ShoppingList" />
+            app:argType="com.philipgurr.domain.ShoppingList" />
         <action
             android:id="@+id/action_nav_add_product_fragment_to_cameraFragment"
             app:destination="@id/camera_fragment" />

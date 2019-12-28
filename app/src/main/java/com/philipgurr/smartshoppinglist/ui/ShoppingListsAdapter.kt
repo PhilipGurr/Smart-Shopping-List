@@ -3,8 +3,8 @@ package com.philipgurr.smartshoppinglist.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import com.philipgurr.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.databinding.ShoppinglistItemBinding
-import com.philipgurr.smartshoppinglist.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.ui.mylists.ShoppingListToUIMapper
 import com.philipgurr.smartshoppinglist.ui.mylists.main.MyListsFragmentDirections
 

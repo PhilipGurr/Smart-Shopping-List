@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.productinput.ProductInputMethod
 import com.philipgurr.smartshoppinglist.vm.AddProductViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_add_product.*
@@ -53,8 +52,8 @@ class AddProductFragment : DaggerFragment() {
     private fun setupRecyclerView() {
         choiceListAdapter = ProductChoiceListAdapter { item ->
             when (item) {
-                ProductInputMethod.TEXT_INPUT_METHOD -> addProductByText()
-                ProductInputMethod.BARCODE_INPUT_METHOD -> addProductByBarcode()
+                TEXT_INPUT_METHOD -> addProductByText()
+                BARCODE_INPUT_METHOD -> addProductByBarcode()
             }
         }
         gridLayoutManager = GridLayoutManager(context, 2)
