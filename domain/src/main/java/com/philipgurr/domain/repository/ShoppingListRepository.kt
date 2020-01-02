@@ -8,6 +8,7 @@ interface ShoppingListRepository {
     suspend fun getAllLists(): List<ShoppingList>
     suspend fun addList(value: ShoppingList)
     suspend fun addLists(values: List<ShoppingList>)
-    suspend fun getProducts(shoppingListName: String): List<Product>
-    suspend fun addProduct(shoppingListName: String, value: Product)
+    suspend fun deleteList(id: String)
+    suspend fun getProducts(name: String): List<Product>
+    suspend fun addProduct(name: String, value: Product)
 }

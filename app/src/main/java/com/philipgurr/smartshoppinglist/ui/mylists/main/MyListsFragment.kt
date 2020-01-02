@@ -1,5 +1,6 @@
 package com.philipgurr.smartshoppinglist.ui.mylists.main
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
+import com.philipgurr.smartshoppinglist.ui.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
@@ -29,8 +33,8 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private val shoppingListAdapter =
-        ShoppingListsAdapter()
+    private val shoppingListAdapter = ShoppingListsAdapter()
+    private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,13 +70,30 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setupRecyclerView() {
         linearLayoutManager = LinearLayoutManager(context)
-        myListsRecyclerView.layoutManager = linearLayoutManager
-        myListsRecyclerView.adapter = shoppingListAdapter
+        with(myListsRecyclerView) {
+            layoutManager = linearLayoutManager
+            adapter = shoppingListAdapter
+
+            swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
+                val position = viewHolder.adapterPosition
+                deleteList(position)
+            }
+            ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
+        }
+    }
+
+    private fun deleteList(position: Int) {
+        val listToDelete = shoppingListAdapter.data[position]
+        shoppingListAdapter.removeItem(position)
+        shoppingListAdapter.notifyItemRemoved(position)
+        viewModel.deleteShoppingList(listToDelete.name)
     }
 
     override fun onRefresh() {
-        swipeRefreshMyLists.isRefreshing = true
-        viewModel.loadShoppingLists()
+        runWithPermissions(Manifest.permission.INTERNET) {
+            swipeRefreshMyLists.isRefreshing = true
+            viewModel.loadShoppingLists()
+        }
     }
 
     private fun createNewShoppingList() {

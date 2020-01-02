@@ -21,6 +21,12 @@ class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistIt
         )
     }
 
+    fun removeItem(position: Int) {
+        val newItems = data.toMutableList()
+        newItems.removeAt(position)
+        data = newItems
+    }
+
     class ShoppingListViewHolder(private val binding: ShoppinglistItemBinding) :
         ItemViewHolder<ShoppingList, ShoppinglistItemBinding>(binding) {
         private val mapper = ShoppingListToUIMapper()

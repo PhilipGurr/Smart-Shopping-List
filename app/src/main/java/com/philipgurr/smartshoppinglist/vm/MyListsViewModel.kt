@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.domain.ShoppingList
 import com.philipgurr.domain.usecases.AddListUseCase
+import com.philipgurr.domain.usecases.DeleteListUseCase
 import com.philipgurr.domain.usecases.GetListsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MyListsViewModel @Inject constructor(
     private val getListsUseCase: GetListsUseCase,
-    private val addListUseCase: AddListUseCase
+    private val addListUseCase: AddListUseCase,
+    private val deleteListUseCase: DeleteListUseCase
 ) : ViewModel() {
 
     private val _text = MutableLiveData<List<ShoppingList>>()
@@ -28,6 +30,12 @@ class MyListsViewModel @Inject constructor(
         viewModelScope.launch {
             addListUseCase.addList(name)
             loadShoppingLists()
+        }
+    }
+
+    fun deleteShoppingList(name: String) {
+        viewModelScope.launch {
+            deleteListUseCase.delete(name)
         }
     }
 }

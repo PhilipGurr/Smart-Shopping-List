@@ -19,7 +19,6 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
     private val database: FirebaseFirestore,
     private val userManager: UserManager
 ) : ShoppingListDatasource {
-    private var currentUser = userManager.getCurrentUser()
     private lateinit var shoppingListCollection: CollectionReference
 
     private fun getShoppingListCollectionForCurrentUser() {
@@ -62,6 +61,13 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
         shoppingLists
     }
 
+    override suspend fun delete(id: String) {
+        withContext(Dispatchers.IO) {
+            getShoppingListCollectionForCurrentUser()
+            shoppingListCollection.document(id).delete()
+        }
+    }
+
     override suspend fun insert(value: ShoppingList) {
         getShoppingListCollectionForCurrentUser()
         withContext(Dispatchers.IO) {
@@ -75,14 +81,14 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
         values.forEach { insert(it) }
     }
 
-    override suspend fun getAllProduct(shoppingListName: String): List<Product> {
+    override suspend fun getAllProducts(name: String): List<Product> {
         getShoppingListCollectionForCurrentUser()
-        return getProducts(shoppingListName)
+        return getProducts(name)
     }
 
-    override suspend fun insertProduct(shoppingListId: String, value: Product) {
+    override suspend fun insertProduct(id: String, value: Product) {
         getShoppingListCollectionForCurrentUser()
-        addProducts(shoppingListId, value)
+        addProducts(id, value)
     }
 
     private suspend fun addProducts(shoppingListId: String, vararg values: Product) {
