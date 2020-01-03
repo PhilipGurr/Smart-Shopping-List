@@ -11,4 +11,5 @@ interface ShoppingListRepository {
     suspend fun deleteList(id: String)
     suspend fun getProducts(name: String): List<Product>
     suspend fun addProduct(name: String, value: Product)
+    suspend fun deleteProduct(product: Product)
 }

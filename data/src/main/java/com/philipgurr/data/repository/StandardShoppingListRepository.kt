@@ -36,4 +36,8 @@ class StandardShoppingListRepository @Inject constructor(
     override suspend fun addProduct(name: String, value: Product) {
         shoppingListDatasource.insertProduct(name.toId(), value)
     }
+
+    override suspend fun deleteProduct(product: Product) {
+        shoppingListDatasource
+    }
 }

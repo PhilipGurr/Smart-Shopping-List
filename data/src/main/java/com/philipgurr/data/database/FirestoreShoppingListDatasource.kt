@@ -17,19 +17,24 @@ private const val PRODUCT_LISTS_COLLECTION_ID = "products"
 
 class FirebaseCloudShoppingListDatasource @Inject constructor(
     private val database: FirebaseFirestore,
-    private val userManager: UserManager
+    userManager: UserManager
 ) : ShoppingListDatasource {
     private lateinit var shoppingListCollection: CollectionReference
 
-    private fun getShoppingListCollectionForCurrentUser() {
+    init {
+        userManager.addOnUserChangedListener { uid ->
+            getShoppingListCollectionForCurrentUser(uid)
+        }
+    }
+
+    private fun getShoppingListCollectionForCurrentUser(uid: String) {
         shoppingListCollection = database
             .collection(USER_LISTS_COLLECTION_ID)
-            .document(userManager.getCurrentUser())
+            .document(uid)
             .collection(SHOPPING_LISTS_COLLECTION_ID)
     }
 
     override suspend fun get(name: String) = withContext(Dispatchers.IO) {
-        getShoppingListCollectionForCurrentUser()
         getShoppingList(name)
     }
 
@@ -41,15 +46,14 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
         }
     }
 
-    private suspend fun getProducts(shoppingListId: String) =
+    private suspend fun getProducts(id: String) =
         shoppingListCollection
-            .document(shoppingListId)
+            .document(id)
             .collection(PRODUCT_LISTS_COLLECTION_ID)
             .get().await()
             .parse<Product>()
 
     override suspend fun getAll() = withContext(Dispatchers.IO) {
-        getShoppingListCollectionForCurrentUser()
         val snapshots = shoppingListCollection.get().await()
         val shoppingLists = mutableListOf<ShoppingList>()
 
@@ -63,13 +67,11 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
 
     override suspend fun delete(id: String) {
         withContext(Dispatchers.IO) {
-            getShoppingListCollectionForCurrentUser()
             shoppingListCollection.document(id).delete()
         }
     }
 
     override suspend fun insert(value: ShoppingList) {
-        getShoppingListCollectionForCurrentUser()
         withContext(Dispatchers.IO) {
             shoppingListCollection.document(value.id).set(value)
             addProducts(value.id, *value.products.toTypedArray())
@@ -77,29 +79,36 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
     }
 
     override suspend fun insertAll(values: List<ShoppingList>) {
-        getShoppingListCollectionForCurrentUser()
         values.forEach { insert(it) }
     }
 
-    override suspend fun getAllProducts(name: String): List<Product> {
-        getShoppingListCollectionForCurrentUser()
-        return getProducts(name)
+    override suspend fun getAllProducts(id: String): List<Product> {
+        return getProducts(id)
     }
 
     override suspend fun insertProduct(id: String, value: Product) {
-        getShoppingListCollectionForCurrentUser()
         addProducts(id, value)
     }
 
-    private suspend fun addProducts(shoppingListId: String, vararg values: Product) {
+    private suspend fun addProducts(id: String, vararg values: Product) {
         withContext(Dispatchers.IO) {
             for (product in values) {
                 shoppingListCollection
-                    .document(shoppingListId)
+                    .document(id)
                     .collection(PRODUCT_LISTS_COLLECTION_ID)
                     .document(product.name.toId())
                     .set(product)
             }
+        }
+    }
+
+    override suspend fun deleteProduct(id: String, product: Product) {
+        withContext(Dispatchers.IO) {
+            shoppingListCollection
+                .document(id)
+                .collection(PRODUCT_LISTS_COLLECTION_ID)
+                .document(product.name.toId())
+                .delete()
         }
     }
 }

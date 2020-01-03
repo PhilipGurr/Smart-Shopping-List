@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.philipgurr.data.database.UserManager
 import com.philipgurr.domain.ShoppingList
 import com.philipgurr.domain.usecases.AddListUseCase
 import com.philipgurr.domain.usecases.DeleteListUseCase
@@ -14,15 +15,21 @@ import javax.inject.Inject
 class MyListsViewModel @Inject constructor(
     private val getListsUseCase: GetListsUseCase,
     private val addListUseCase: AddListUseCase,
-    private val deleteListUseCase: DeleteListUseCase
+    private val deleteListUseCase: DeleteListUseCase,
+    userManager: UserManager
 ) : ViewModel() {
+    private val _shoppingLists = MutableLiveData<List<ShoppingList>>()
+    val shoppingLists: LiveData<List<ShoppingList>> = _shoppingLists
 
-    private val _text = MutableLiveData<List<ShoppingList>>()
-    val shoppingLists: LiveData<List<ShoppingList>> = _text
+    init {
+        userManager.addOnUserChangedListener {
+            loadShoppingLists()
+        }
+    }
 
     fun loadShoppingLists() {
         viewModelScope.launch {
-            _text.value = getListsUseCase.getShoppingLists()
+            _shoppingLists.value = getListsUseCase.getShoppingLists()
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -24,7 +25,7 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
 const val RC_SIGN_IN = 1001
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +42,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun createAndShowNavigation() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
         setupNavigationHeader()
 
         nav_view.setNavigationItemSelectedListener { item ->
             when (val id = item.itemId) {
                 R.id.nav_signout -> {
-                    FirebaseAuth.getInstance().signOut()
-                    showUserNotLoggedIn()
+                    AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener {
+                            showUserNotLoggedIn()
+                        }
                 }
                 else -> navController.navigate(id)
             }
@@ -78,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             header.email.text = user.email
             header.userPic.load(user.photoUrl)
         }
+        //navController.popBackStack()
     }
 
     private fun showUserNotLoggedIn() {
@@ -87,6 +92,7 @@ class MainActivity : AppCompatActivity() {
         loginButton.onClick {
             login()
         }
+        //navController.popBackStack()
     }
 
     private fun removeNavigationHeader() {
