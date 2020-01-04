@@ -68,6 +68,11 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadShoppingLists()
+    }
+
     private fun setupRecyclerView() {
         linearLayoutManager = LinearLayoutManager(context)
         with(myListsRecyclerView) {
