@@ -9,7 +9,7 @@ import javax.inject.Inject
 class DeleteProductUseCase @Inject constructor(
     private val repository: ShoppingListRepository
 ) {
-    private suspend fun deleteProduct(product: Product) = withContext(Dispatchers.Default) {
-        repository.deleteProduct(product)
+    suspend fun deleteProduct(id: String, product: Product) = withContext(Dispatchers.Default) {
+        repository.deleteProduct(id, product)
     }
 }

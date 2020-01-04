@@ -25,6 +25,12 @@ abstract class BaseListBindingAdapter<T, B : ViewDataBinding>
         holder.bind(data[position])
     }
 
+    fun removeItem(position: Int) {
+        val newItems = data.toMutableList()
+        newItems.removeAt(position)
+        data = newItems
+    }
+
     abstract class ItemViewHolder<T, B : ViewDataBinding>(
         binding: B
     ) : RecyclerView.ViewHolder(binding.root) {

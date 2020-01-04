@@ -10,10 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
+import com.philipgurr.smartshoppinglist.ui.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
@@ -30,6 +32,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var productListAdapter: ProductListAdapter
     private lateinit var binding: FragmentShoppingListDetailBinding
+    private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,8 +85,23 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
 
     private fun setupRecyclerView() {
         linearLayoutManager = LinearLayoutManager(context)
-        productListRecyclerView.layoutManager = linearLayoutManager
-        productListRecyclerView.adapter = productListAdapter
+        with(productListRecyclerView) {
+            layoutManager = linearLayoutManager
+            adapter = productListAdapter
+
+            swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
+                val position = viewHolder.adapterPosition
+                deleteProduct(position)
+            }
+            ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
+        }
+    }
+
+    private fun deleteProduct(position: Int) {
+        val productToDelete = productListAdapter.data[position]
+        productListAdapter.removeItem(position)
+        productListAdapter.notifyItemRemoved(position)
+        viewModel.deleteProduct(productToDelete)
     }
 
     private fun setupFab() {
