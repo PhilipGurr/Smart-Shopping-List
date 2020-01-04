@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
+import com.philipgurr.smartshoppinglist.ui.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.vm.CompletedListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_completed_list.*
@@ -24,8 +26,8 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private val shoppingListAdapter =
-        ShoppingListsAdapter()
+    private val shoppingListAdapter = ShoppingListsAdapter()
+    private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +57,30 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadShoppingLists()
+    }
+
     private fun setupRecyclerView() {
         linearLayoutManager = LinearLayoutManager(context)
-        completedListsRecyclerView.layoutManager = linearLayoutManager
-        completedListsRecyclerView.adapter = shoppingListAdapter
+        with(completedListsRecyclerView) {
+            layoutManager = linearLayoutManager
+            adapter = shoppingListAdapter
+
+            swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
+                val position = viewHolder.adapterPosition
+                deleteList(position)
+            }
+            ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
+        }
+    }
+
+    private fun deleteList(position: Int) {
+        val listToDelete = shoppingListAdapter.data[position]
+        shoppingListAdapter.removeItem(position)
+        shoppingListAdapter.notifyItemRemoved(position)
+        viewModel.deleteShoppingList(listToDelete.name)
     }
 
     override fun onRefresh() {
