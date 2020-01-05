@@ -7,16 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.philipgurr.data.api.BarcodeNotFoundException
 import com.philipgurr.domain.Product
 import com.philipgurr.domain.RecognitionImage
-import com.philipgurr.domain.usecases.AddProductUseCase
-import com.philipgurr.domain.usecases.GetProductFromBarcodeUseCase
-import com.philipgurr.domain.usecases.RecognizeBarcodeUseCase
+import com.philipgurr.domain.repository.RecognitionRepository
+import com.philipgurr.domain.repository.ShoppingListRepository
+import com.philipgurr.domain.repository.UpcRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddProductViewModel @Inject constructor(
-    private val addProductUseCase: AddProductUseCase,
-    private val recognizeBarcodeUseCase: RecognizeBarcodeUseCase,
-    private val getProductFromBarcodeUseCase: GetProductFromBarcodeUseCase
+    private val shoppingListRepository: ShoppingListRepository,
+    private val recognitionRepository: RecognitionRepository,
+    private val upcRepository: UpcRepository
 ) : ViewModel() {
     var listName = ""
     private val _recognizedProduct = MutableLiveData<Product>()
@@ -31,7 +31,7 @@ class AddProductViewModel @Inject constructor(
 
     private fun insertProduct(product: Product) {
         viewModelScope.launch {
-            addProductUseCase.add(listName, product)
+            shoppingListRepository.addProduct(listName, product)
         }
     }
 
@@ -39,10 +39,10 @@ class AddProductViewModel @Inject constructor(
         if (recognizerRunning) return
         recognizerRunning = true
         viewModelScope.launch {
-            val barcode = recognizeBarcodeUseCase.recognize(image)
+            val barcode = recognitionRepository.recognize(image)
             if (barcode.isNotEmpty()) {
                 try {
-                    _recognizedProduct.value = getProductFromBarcodeUseCase.getProduct(barcode)
+                    _recognizedProduct.value = upcRepository.getProduct(barcode)
                 } catch (ex: BarcodeNotFoundException) {
                     _barcodeNotFound.value = "Cannot recognize this product."
                 }

@@ -5,27 +5,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.domain.ShoppingList
-import com.philipgurr.domain.usecases.DeleteListUseCase
-import com.philipgurr.domain.usecases.GetCompletedListsUseCase
+import com.philipgurr.domain.repository.ShoppingListRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CompletedListsViewModel @Inject constructor(
-    private val getCompletedListsUseCase: GetCompletedListsUseCase,
-    private val deleteListUseCase: DeleteListUseCase
+    private val repository: ShoppingListRepository
 ) : ViewModel() {
     private val _completedLists = MutableLiveData<List<ShoppingList>>()
     val completedLists: LiveData<List<ShoppingList>> = _completedLists
 
     fun loadShoppingLists() {
         viewModelScope.launch {
-            _completedLists.value = getCompletedListsUseCase.getCompletedLists()
+            _completedLists.value = repository.getAllLists().filter { shoppingList ->
+                shoppingList.completedProducts().size == shoppingList.products.size
+            }
         }
     }
 
     fun deleteShoppingList(name: String) {
         viewModelScope.launch {
-            deleteListUseCase.delete(name)
+            repository.deleteList(name)
         }
     }
 }

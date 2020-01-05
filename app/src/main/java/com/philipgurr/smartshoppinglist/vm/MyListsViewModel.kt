@@ -6,16 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.data.database.UserManager
 import com.philipgurr.domain.ShoppingList
-import com.philipgurr.domain.usecases.AddListUseCase
-import com.philipgurr.domain.usecases.DeleteListUseCase
-import com.philipgurr.domain.usecases.GetListsUseCase
+import com.philipgurr.domain.repository.ShoppingListRepository
+import com.philipgurr.domain.util.toId
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MyListsViewModel @Inject constructor(
-    private val getListsUseCase: GetListsUseCase,
-    private val addListUseCase: AddListUseCase,
-    private val deleteListUseCase: DeleteListUseCase,
+    private val repository: ShoppingListRepository,
     userManager: UserManager
 ) : ViewModel() {
     private val _shoppingLists = MutableLiveData<List<ShoppingList>>()
@@ -29,20 +26,20 @@ class MyListsViewModel @Inject constructor(
 
     fun loadShoppingLists() {
         viewModelScope.launch {
-            _shoppingLists.value = getListsUseCase.getShoppingLists()
+            _shoppingLists.value = repository.getAllLists()
         }
     }
 
     fun createShoppingList(name: String) {
         viewModelScope.launch {
-            addListUseCase.addList(name)
+            repository.addList(ShoppingList(name.toId(), name))
             loadShoppingLists()
         }
     }
 
     fun deleteShoppingList(name: String) {
         viewModelScope.launch {
-            deleteListUseCase.delete(name)
+            repository.deleteList(name.toId())
         }
     }
 }

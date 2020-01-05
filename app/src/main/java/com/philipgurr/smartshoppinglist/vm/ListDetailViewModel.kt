@@ -6,16 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.domain.Product
 import com.philipgurr.domain.ShoppingList
-import com.philipgurr.domain.usecases.AddProductUseCase
-import com.philipgurr.domain.usecases.DeleteProductUseCase
-import com.philipgurr.domain.usecases.GetListsUseCase
+import com.philipgurr.domain.repository.ShoppingListRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListDetailViewModel @Inject constructor(
-    private val getListsUseCase: GetListsUseCase,
-    private val addProductUseCase: AddProductUseCase,
-    private val deleteProductUseCase: DeleteProductUseCase
+    private val repository: ShoppingListRepository
 ) : ViewModel() {
     var listName = ""
     private val _shoppingList = MutableLiveData<ShoppingList>()
@@ -23,7 +19,7 @@ class ListDetailViewModel @Inject constructor(
 
     fun loadShoppingList() {
         viewModelScope.launch {
-            _shoppingList.value = getListsUseCase.getShoppingList(listName)
+            _shoppingList.value = repository.getList(listName)
         }
     }
 
@@ -31,13 +27,13 @@ class ListDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val newProduct =
                 Product(product.name, !product.completed)
-            insertProduct(newProduct) // TODO: Create use case for setting product as completed instead of using insert
+            insertProduct(newProduct) // TODO: Create toggle method in repository for setting product as completed instead of using insert
         }
     }
 
     private fun insertProduct(product: Product) {
         viewModelScope.launch {
-            addProductUseCase.add(listName, product)
+            repository.addProduct(listName, product)
             loadShoppingList()
         }
     }
@@ -45,7 +41,7 @@ class ListDetailViewModel @Inject constructor(
     fun deleteProduct(product: Product) {
         viewModelScope.launch {
             shoppingList.value?.let {
-                deleteProductUseCase.deleteProduct(it.id, product)
+                repository.deleteProduct(it.id, product)
                 loadShoppingList()
             }
         }
