@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui.mylists.main
+package com.philipgurr.smartshoppinglist.ui.mylists
 
 import android.Manifest
 import android.os.Bundle

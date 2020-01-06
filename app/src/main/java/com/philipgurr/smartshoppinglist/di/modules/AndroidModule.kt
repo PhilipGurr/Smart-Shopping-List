@@ -4,7 +4,7 @@ import com.philipgurr.smartshoppinglist.ui.addproduct.AddProductFragment
 import com.philipgurr.smartshoppinglist.ui.addproduct.CameraFragment
 import com.philipgurr.smartshoppinglist.ui.completedlists.CompletedListsFragment
 import com.philipgurr.smartshoppinglist.ui.detail.ListDetailFragment
-import com.philipgurr.smartshoppinglist.ui.mylists.main.MyListsFragment
+import com.philipgurr.smartshoppinglist.ui.mylists.MyListsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_shopping_lists"
-        android:name="com.philipgurr.smartshoppinglist.ui.mylists.main.MyListsFragment"
+        android:name="com.philipgurr.smartshoppinglist.ui.mylists.MyListsFragment"
         android:label="@string/menu_my_lists"
         tools:layout="@layout/fragment_my_lists" >
         <action
