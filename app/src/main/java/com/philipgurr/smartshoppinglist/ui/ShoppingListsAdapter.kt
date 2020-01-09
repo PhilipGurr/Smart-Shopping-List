@@ -6,7 +6,6 @@ import androidx.navigation.Navigation
 import com.philipgurr.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.databinding.ShoppinglistItemBinding
 import com.philipgurr.smartshoppinglist.ui.mylists.MyListsFragmentDirections
-import com.philipgurr.smartshoppinglist.ui.mylists.ShoppingListToUIMapper
 
 class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistItemBinding>() {
     override var data = listOf<ShoppingList>()
@@ -23,14 +22,11 @@ class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistIt
 
     class ShoppingListViewHolder(private val binding: ShoppinglistItemBinding) :
         ItemViewHolder<ShoppingList, ShoppinglistItemBinding>(binding) {
-        private val mapper = ShoppingListToUIMapper()
 
         override fun bind(item: ShoppingList) {
-            val uiModel = mapper.map(item)
             with(binding) {
                 viewHolder = this@ShoppingListViewHolder
                 shoppingList = item
-                shoppingListUI = uiModel
                 executePendingBindings()
             }
         }
