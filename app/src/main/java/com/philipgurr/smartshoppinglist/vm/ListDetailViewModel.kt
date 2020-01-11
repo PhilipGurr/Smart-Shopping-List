@@ -31,6 +31,12 @@ class ListDetailViewModel @Inject constructor(
         }
     }
 
+    fun insertProduct(name: String) {
+        insertProduct(
+            Product(name)
+        )
+    }
+
     private fun insertProduct(product: Product) {
         viewModelScope.launch {
             repository.addProduct(listName, product)

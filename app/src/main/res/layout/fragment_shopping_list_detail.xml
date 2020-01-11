@@ -57,13 +57,45 @@
                     android:layout_height="match_parent"
                     tools:listitem="@layout/productlist_item" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_add_product"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="@dimen/fab_margin"
-                    app:srcCompat="@android:drawable/ic_dialog_email" />
+                    android:layout_gravity="bottom|end|right"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fab_text_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:tint="@color/grey_80"
+                        app:backgroundTint="@color/grey_20"
+                        app:fabSize="mini"
+                        app:rippleColor="@color/white"
+                        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fab_barcode_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:tint="@color/grey_80"
+                        app:backgroundTint="@color/grey_20"
+                        app:fabSize="mini"
+                        app:rippleColor="@color/white"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fab_add_product"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:tint="@color/white"
+                        app:fabSize="normal"
+                        app:srcCompat="@android:drawable/ic_input_add" />
+                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

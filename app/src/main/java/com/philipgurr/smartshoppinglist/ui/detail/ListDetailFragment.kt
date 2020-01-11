@@ -16,10 +16,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
 import com.philipgurr.smartshoppinglist.ui.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.util.extensions.initFab
+import com.philipgurr.smartshoppinglist.util.extensions.rotateFab
+import com.philipgurr.smartshoppinglist.util.extensions.showFabIn
+import com.philipgurr.smartshoppinglist.util.extensions.showFabOut
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
+import org.jetbrains.anko.customView
+import org.jetbrains.anko.editText
+import org.jetbrains.anko.okButton
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
 
 class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -33,6 +41,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     private lateinit var productListAdapter: ProductListAdapter
     private lateinit var binding: FragmentShoppingListDetailBinding
     private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback
+    private var rotateFab = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +79,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        setupFab()
+        setupFabs()
 
         viewModel.shoppingList.observe(this, Observer { list ->
             productListAdapter.data = list.products
@@ -104,18 +113,51 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         viewModel.deleteProduct(productToDelete)
     }
 
-    private fun setupFab() {
+    private fun setupFabs() {
+        fab_barcode_input.initFab()
+        fab_text_input.initFab()
+
         fab_add_product.onClick {
-            val actionAdd =
-                ListDetailFragmentDirections.actionNavShoppingListDetailToAddProductFragment(
-                    viewModel.shoppingList.value!!
-                )
-            findNavController().navigate(actionAdd)
+            animateAddProductFabs()
+        }
+
+        fab_text_input.onClick {
+            addProductByText()
+            animateAddProductFabs()
+        }
+        fab_barcode_input.onClick {
+            addProductByBarcode()
+            animateAddProductFabs()
         }
     }
 
-    private fun shouldReloadData(listName: String) =
-        viewModel.shoppingList.value == null || viewModel.listName != listName
+    private fun animateAddProductFabs() {
+        rotateFab = !rotateFab
+        fab_add_product.rotateFab(rotateFab)
+        if (rotateFab) {
+            fab_text_input.showFabIn()
+            fab_barcode_input.showFabIn()
+        } else {
+            fab_text_input.showFabOut()
+            fab_barcode_input.showFabOut()
+        }
+    }
+
+    private fun addProductByText() {
+        alert("New Product") {
+            customView {
+                val name = editText { hint = "Enter..." }
+                okButton {
+                    val text = name.text.toString()
+                    viewModel.insertProduct(text)
+                }
+            }
+        }.show()
+    }
+
+    private fun addProductByBarcode() {
+        findNavController().navigate(R.id.camera_fragment)
+    }
 
     override fun onRefresh() {
         swipeRefreshDetail.isRefreshing = true
