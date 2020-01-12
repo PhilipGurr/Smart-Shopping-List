@@ -19,11 +19,24 @@ class AddProductViewModel @Inject constructor(
     private val upcRepository: UpcRepository
 ) : ViewModel() {
     var listName = ""
-    private val _recognizedProduct = MutableLiveData<Product>()
-    val recognizedProduct: LiveData<Product> = _recognizedProduct
-    private val _barcodeNotFound = MutableLiveData<String>()
-    val barcodeNotFound: LiveData<String> = _barcodeNotFound
-    var recognizerRunning = false
+    private var _recognizedProduct = MutableLiveData<Product>()
+    private var _barcodeNotFound = MutableLiveData<String>()
+    private var recognizerRunning = false
+
+    fun getRecognizedProduct(): LiveData<Product> = _recognizedProduct
+
+    fun getBarcodeNotFound(): LiveData<String> = _barcodeNotFound
+
+    fun resetBarcodeRecognition() {
+        _recognizedProduct = MutableLiveData()
+        _barcodeNotFound = MutableLiveData()
+    }
+
+    fun insertCurrentProduct() {
+        _recognizedProduct.value?.let {
+            insertProduct(it)
+        }
+    }
 
     fun insertProduct(name: String) {
         insertProduct(Product(name))
@@ -45,6 +58,8 @@ class AddProductViewModel @Inject constructor(
                     _recognizedProduct.value = upcRepository.getProduct(barcode)
                 } catch (ex: BarcodeNotFoundException) {
                     _barcodeNotFound.value = "Cannot recognize this product."
+                } finally {
+                    recognizerRunning = false
                 }
             } else {
                 recognizerRunning = false
