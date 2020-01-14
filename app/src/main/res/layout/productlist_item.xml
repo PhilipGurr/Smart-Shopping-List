@@ -30,6 +30,7 @@
             android:onClick="@{() -> viewModel.toggleCompleted(product)}"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.1"
+            android:buttonTint="@color/colorAccent" />
     </LinearLayout>
 </layout>
