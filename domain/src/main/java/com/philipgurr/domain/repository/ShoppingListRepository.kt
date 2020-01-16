@@ -9,7 +9,7 @@ interface ShoppingListRepository {
     suspend fun addList(value: ShoppingList)
     suspend fun addLists(values: List<ShoppingList>)
     suspend fun deleteList(id: String)
-    suspend fun getProducts(name: String): List<Product>
-    suspend fun addProduct(name: String, value: Product)
-    suspend fun deleteProduct(id: String, product: Product)
+    suspend fun getProducts(list: ShoppingList): List<Product>
+    suspend fun addProduct(list: ShoppingList, value: Product)
+    suspend fun deleteProduct(list: ShoppingList, product: Product)
 }

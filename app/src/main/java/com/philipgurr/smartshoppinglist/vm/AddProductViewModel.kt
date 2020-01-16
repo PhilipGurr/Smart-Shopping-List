@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.philipgurr.data.api.BarcodeNotFoundException
 import com.philipgurr.domain.Product
 import com.philipgurr.domain.RecognitionImage
+import com.philipgurr.domain.ShoppingList
 import com.philipgurr.domain.repository.RecognitionRepository
 import com.philipgurr.domain.repository.ShoppingListRepository
 import com.philipgurr.domain.repository.UpcRepository
@@ -18,10 +19,14 @@ class AddProductViewModel @Inject constructor(
     private val recognitionRepository: RecognitionRepository,
     private val upcRepository: UpcRepository
 ) : ViewModel() {
-    var listName = ""
+    private lateinit var internalList: ShoppingList
     private var _recognizedProduct = MutableLiveData<Product>()
     private var _barcodeNotFound = MutableLiveData<String>()
     private var recognizerRunning = false
+
+    fun setShoppingList(list: ShoppingList) {
+        internalList = list
+    }
 
     fun getRecognizedProduct(): LiveData<Product> = _recognizedProduct
 
@@ -44,7 +49,7 @@ class AddProductViewModel @Inject constructor(
 
     private fun insertProduct(product: Product) {
         viewModelScope.launch {
-            shoppingListRepository.addProduct(listName, product)
+            shoppingListRepository.addProduct(internalList, product)
         }
     }
 

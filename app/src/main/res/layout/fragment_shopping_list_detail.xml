@@ -34,7 +34,7 @@
                     android:textColor="@color/gray"
                     android:textSize="30sp" />
 
-                <com.philipgurr.smartshoppinglist.ui.ArcProgress
+                <com.philipgurr.smartshoppinglist.ui.util.ArcProgress
                     android:layout_width="200sp"
                     android:layout_height="200sp"
                     android:layout_gravity="center"

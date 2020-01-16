@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
-import com.philipgurr.smartshoppinglist.ui.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.ui.util.OnNavigateBackListener
+import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.util.extensions.initFab
 import com.philipgurr.smartshoppinglist.util.extensions.rotateFab
 import com.philipgurr.smartshoppinglist.util.extensions.showFabIn
@@ -30,7 +31,8 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
 
-class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
+class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener,
+    OnNavigateBackListener {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
@@ -56,8 +58,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     private fun parseArguments() {
         arguments?.let { bundle ->
             val safeArgs = ListDetailFragmentArgs.fromBundle(bundle)
-            val listName = safeArgs.shoppingList.name
-            viewModel.listName = listName
+            viewModel.setShoppingList(safeArgs.shoppingList)
         }
     }
 
@@ -82,14 +83,13 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         setupFabs()
 
         viewModel.shoppingList.observe(this, Observer { list ->
-            productListAdapter.data = list.products
+            productListAdapter.data = list.getSortedProducts()
             productListAdapter.notifyDataSetChanged()
 
             swipeRefreshDetail.isRefreshing = false
         })
 
         swipeRefreshDetail.setOnRefreshListener(this)
-        swipeRefreshDetail.post { onRefresh() }
     }
 
     private fun setupRecyclerView() {
@@ -98,10 +98,13 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
             layoutManager = linearLayoutManager
             adapter = productListAdapter
 
-            swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
-                val position = viewHolder.adapterPosition
-                deleteProduct(position)
-            }
+            swipeToDeleteCallback =
+                SwipeToDeleteCallback(
+                    context!!
+                ) { viewHolder ->
+                    val position = viewHolder.adapterPosition
+                    deleteProduct(position)
+                }
             ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
         }
     }
@@ -156,11 +159,18 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     }
 
     private fun addProductByBarcode() {
-        findNavController().navigate(R.id.camera_fragment)
+        val action = ListDetailFragmentDirections.actionNavShoppingListDetailToCameraFragment(
+            viewModel.shoppingList.value!!
+        )
+        findNavController().navigate(action)
     }
 
     override fun onRefresh() {
         swipeRefreshDetail.isRefreshing = true
-        viewModel.loadShoppingList()
+        viewModel.fetshNewestShoppingList()
+    }
+
+    override fun onNavigatieBack() {
+        onRefresh()
     }
 }

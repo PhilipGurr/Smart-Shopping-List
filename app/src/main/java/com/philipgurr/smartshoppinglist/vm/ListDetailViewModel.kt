@@ -4,30 +4,55 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.philipgurr.data.api.BarcodeNotFoundException
 import com.philipgurr.domain.Product
+import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.repository.RecognitionRepository
 import com.philipgurr.domain.repository.ShoppingListRepository
+import com.philipgurr.domain.repository.UpcRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListDetailViewModel @Inject constructor(
-    private val repository: ShoppingListRepository
+    private val shoppingListRepository: ShoppingListRepository,
+    private val recognitionRepository: RecognitionRepository,
+    private val upcRepository: UpcRepository
 ) : ViewModel() {
-    var listName = ""
+    private lateinit var internalList: ShoppingList
     private val _shoppingList = MutableLiveData<ShoppingList>()
     val shoppingList: LiveData<ShoppingList> = _shoppingList
+    private var _recognizedProduct = MutableLiveData<Product>()
+    private var _barcodeNotFound = MutableLiveData<String>()
+    private var recognizerRunning = false
 
-    fun loadShoppingList() {
+    fun setShoppingList(list: ShoppingList) {
+        internalList = list
+        _shoppingList.value = internalList
+    }
+
+    fun getRecognizedProduct(): LiveData<Product> = _recognizedProduct
+
+    fun getBarcodeNotFound(): LiveData<String> = _barcodeNotFound
+
+    fun fetshNewestShoppingList() {
         viewModelScope.launch {
-            _shoppingList.value = repository.getList(listName)
+            internalList = shoppingListRepository.getList(internalList.name)
+            refreshShoppingList()
         }
     }
 
     fun toggleCompleted(product: Product) {
         viewModelScope.launch {
-            val newProduct =
-                Product(product.name, !product.completed)
+            internalList.products.remove(product)
+            val newProduct = Product(name = product.name, completed = !product.completed)
             insertProduct(newProduct) // TODO: Create toggle method in repository for setting product as completed instead of using insert
+        }
+    }
+
+    fun insertCurrentProduct() {
+        _recognizedProduct.value?.let {
+            insertProduct(it)
         }
     }
 
@@ -39,16 +64,44 @@ class ListDetailViewModel @Inject constructor(
 
     private fun insertProduct(product: Product) {
         viewModelScope.launch {
-            repository.addProduct(listName, product)
-            loadShoppingList()
+            internalList.products.add(product)
+            shoppingListRepository.addProduct(internalList, product)
+            refreshShoppingList()
         }
+    }
+
+    private fun refreshShoppingList() {
+        _shoppingList.value = internalList
     }
 
     fun deleteProduct(product: Product) {
         viewModelScope.launch {
-            shoppingList.value?.let {
-                repository.deleteProduct(it.id, product)
-                loadShoppingList()
+            internalList.products.remove(product)
+            shoppingListRepository.deleteProduct(internalList, product)
+            refreshShoppingList()
+        }
+    }
+
+    fun resetBarcodeRecognition() {
+        _recognizedProduct = MutableLiveData()
+        _barcodeNotFound = MutableLiveData()
+    }
+
+    fun recognizeBarcode(image: RecognitionImage) {
+        if (recognizerRunning) return
+        recognizerRunning = true
+        viewModelScope.launch {
+            val barcode = recognitionRepository.recognize(image)
+            if (barcode.isNotEmpty()) {
+                try {
+                    _recognizedProduct.value = upcRepository.getProduct(barcode)
+                } catch (ex: BarcodeNotFoundException) {
+                    _barcodeNotFound.value = "Cannot recognize this product."
+                } finally {
+                    recognizerRunning = false
+                }
+            } else {
+                recognizerRunning = false
             }
         }
     }

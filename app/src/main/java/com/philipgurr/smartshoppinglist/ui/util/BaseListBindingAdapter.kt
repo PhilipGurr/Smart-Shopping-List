@@ -1,4 +1,4 @@
-package com.philipgurr.smartshoppinglist.ui
+package com.philipgurr.smartshoppinglist.ui.util
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

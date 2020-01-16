@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.philipgurr.smartshoppinglist.vm.AddProductViewModel" />
+            type="com.philipgurr.smartshoppinglist.vm.ListDetailViewModel" />
     </data>
 
     <FrameLayout xmlns:tools="http://schemas.android.com/tools"
@@ -33,7 +33,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:minHeight="100dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/colorPrimaryDark">
 
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_gravity="center|start"
                 android:layout_marginStart="15sp"
                 android:maxLength="30"
-                android:text="Example Product from Philip Gurr"
+                android:text="@{viewModel.recognizedProduct.displayName()}"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 

@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.philipgurr.domain.Product
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.ProductlistItemBinding
-import com.philipgurr.smartshoppinglist.ui.BaseListBindingAdapter
+import com.philipgurr.smartshoppinglist.ui.util.BaseListBindingAdapter
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 
 class ProductListAdapter(

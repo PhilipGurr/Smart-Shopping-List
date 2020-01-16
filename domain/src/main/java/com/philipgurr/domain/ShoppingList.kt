@@ -7,7 +7,8 @@ class ShoppingList(
     var id: String = "",
     var name: String = "",
     val created: Date = Date(),
-    var products: List<Product> = listOf()
+    var products: MutableList<Product> = mutableListOf()
 ) : Serializable {
     fun completedProducts() = products.filter { it.completed }
+    fun getSortedProducts() = products.apply { sortByDescending { it.created } }
 }

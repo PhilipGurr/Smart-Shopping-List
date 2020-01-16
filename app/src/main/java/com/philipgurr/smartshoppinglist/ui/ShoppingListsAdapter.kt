@@ -6,6 +6,7 @@ import androidx.navigation.Navigation
 import com.philipgurr.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.databinding.ShoppinglistItemBinding
 import com.philipgurr.smartshoppinglist.ui.mylists.MyListsFragmentDirections
+import com.philipgurr.smartshoppinglist.ui.util.BaseListBindingAdapter
 
 class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistItemBinding>() {
     override var data = listOf<ShoppingList>()

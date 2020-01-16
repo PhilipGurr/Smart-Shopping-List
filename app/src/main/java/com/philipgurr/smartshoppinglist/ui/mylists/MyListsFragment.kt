@@ -14,7 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
-import com.philipgurr.smartshoppinglist.ui.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
@@ -33,7 +33,8 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private val shoppingListAdapter = ShoppingListsAdapter()
+    private val shoppingListAdapter =
+        ShoppingListsAdapter()
     private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback
 
     override fun onCreateView(
@@ -79,10 +80,13 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
             layoutManager = linearLayoutManager
             adapter = shoppingListAdapter
 
-            swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
-                val position = viewHolder.adapterPosition
-                deleteList(position)
-            }
+            swipeToDeleteCallback =
+                SwipeToDeleteCallback(
+                    context!!
+                ) { viewHolder ->
+                    val position = viewHolder.adapterPosition
+                    deleteList(position)
+                }
             ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
         }
     }

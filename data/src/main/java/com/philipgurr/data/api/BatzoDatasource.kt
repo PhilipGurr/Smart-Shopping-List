@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
-private const val API_KEY = ""
+private const val API_KEY = "" // TODO: Remove key
 
 class BatzoDatasource @Inject constructor(
     private val batzoService: BatzoService
@@ -19,6 +19,6 @@ class BatzoDatasource @Inject constructor(
             throw BarcodeNotFoundException()
         }
         val name = model.name["en"] ?: model.name.values.first()
-        Product(name, false)
+        Product(name)
     }
 }

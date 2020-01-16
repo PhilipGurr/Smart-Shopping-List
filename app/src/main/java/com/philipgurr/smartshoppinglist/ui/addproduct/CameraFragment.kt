@@ -21,8 +21,9 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentCameraBinding
+import com.philipgurr.smartshoppinglist.ui.util.OnNavigateBackListener
 import com.philipgurr.smartshoppinglist.util.extensions.YUV_420_888toNV21
-import com.philipgurr.smartshoppinglist.vm.AddProductViewModel
+import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -35,16 +36,18 @@ class CameraFragment : DaggerFragment() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(activity!!, factory).get(AddProductViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
     }
     private val imageAnalysisExecutor = Executors.newSingleThreadExecutor()
     private var isResultViewUp = false
     private var isNotFoundViewUp = false
+    private lateinit var onNavigateBackListener: OnNavigateBackListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        parseArguments()
         val binding: FragmentCameraBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_camera,
@@ -54,6 +57,13 @@ class CameraFragment : DaggerFragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
+    }
+
+    private fun parseArguments() {
+        arguments?.let { bundle ->
+            val safeArgs = CameraFragmentArgs.fromBundle(bundle)
+            viewModel.setShoppingList(safeArgs.shoppingList)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

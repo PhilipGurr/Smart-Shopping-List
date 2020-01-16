@@ -46,12 +46,15 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
         }
     }
 
-    private suspend fun getProducts(id: String) =
-        shoppingListCollection
+    private suspend fun getProducts(id: String): MutableList<Product> {
+        val products = shoppingListCollection
             .document(id)
             .collection(PRODUCT_LISTS_COLLECTION_ID)
             .get().await()
             .parse<Product>()
+        products.sortByDescending { it.created }
+        return products
+    }
 
     override suspend fun getAll() = withContext(Dispatchers.IO) {
         val snapshots = shoppingListCollection.get().await()

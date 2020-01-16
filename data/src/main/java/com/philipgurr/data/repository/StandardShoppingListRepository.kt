@@ -30,14 +30,14 @@ class StandardShoppingListRepository @Inject constructor(
         shoppingListDatasource.delete(id)
     }
 
-    override suspend fun getProducts(name: String) =
-        shoppingListDatasource.getAllProducts(name.toId())
+    override suspend fun getProducts(list: ShoppingList) =
+        shoppingListDatasource.getAllProducts(list.id)
 
-    override suspend fun addProduct(name: String, value: Product) {
-        shoppingListDatasource.insertProduct(name.toId(), value)
+    override suspend fun addProduct(list: ShoppingList, value: Product) {
+        shoppingListDatasource.insertProduct(list.id, value)
     }
 
-    override suspend fun deleteProduct(id: String, product: Product) {
-        shoppingListDatasource.deleteProduct(id, product)
+    override suspend fun deleteProduct(list: ShoppingList, product: Product) {
+        shoppingListDatasource.deleteProduct(list.id, product)
     }
 }

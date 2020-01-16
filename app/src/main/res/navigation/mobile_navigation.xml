@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_my_lists" >
         <action
             android:id="@+id/action_shopping_list_detail"
-            app:destination="@id/nav_shopping_list_detail" />
+            app:destination="@id/nav_shopping_list_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -29,23 +33,20 @@
             android:name="shoppingList"
             app:argType="com.philipgurr.domain.ShoppingList" />
         <action
-            android:id="@+id/action_nav_shopping_list_detail_to_addProductFragment"
-            app:destination="@id/nav_add_product_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_add_product_fragment"
-        android:name="com.philipgurr.smartshoppinglist.ui.addproduct.AddProductFragment"
-        android:label="Add Product" >
-        <argument
-            android:name="shoppingList"
-            app:argType="com.philipgurr.domain.ShoppingList" />
-        <action
-            android:id="@+id/action_nav_add_product_fragment_to_cameraFragment"
-            app:destination="@id/camera_fragment" />
+            android:id="@+id/action_nav_shopping_list_detail_to_camera_fragment"
+            app:destination="@id/camera_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/camera_fragment"
         android:name="com.philipgurr.smartshoppinglist.ui.addproduct.CameraFragment"
         android:label="Add Product"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera">
+        <argument
+            android:name="shoppingList"
+            app:argType="com.philipgurr.domain.ShoppingList" />
+    </fragment>
 </navigation>
