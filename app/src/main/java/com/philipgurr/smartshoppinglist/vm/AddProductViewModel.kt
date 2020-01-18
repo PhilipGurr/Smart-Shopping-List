@@ -57,10 +57,10 @@ class AddProductViewModel @Inject constructor(
         if (recognizerRunning) return
         recognizerRunning = true
         viewModelScope.launch {
-            val barcode = recognitionRepository.recognize(image)
-            if (barcode.isNotEmpty()) {
+            val barcode = recognitionRepository.recognize(image) ?: return@launch
+            if (barcode.rawValue.isNotEmpty()) {
                 try {
-                    _recognizedProduct.value = upcRepository.getProduct(barcode)
+                    _recognizedProduct.value = upcRepository.getProduct(barcode.rawValue)
                 } catch (ex: BarcodeNotFoundException) {
                     _barcodeNotFound.value = "Cannot recognize this product."
                 } finally {

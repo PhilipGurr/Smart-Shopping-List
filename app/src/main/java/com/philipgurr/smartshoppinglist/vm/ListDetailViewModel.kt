@@ -8,6 +8,7 @@ import com.philipgurr.data.api.BarcodeNotFoundException
 import com.philipgurr.domain.Product
 import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.barcode.Barcode
 import com.philipgurr.domain.repository.RecognitionRepository
 import com.philipgurr.domain.repository.ShoppingListRepository
 import com.philipgurr.domain.repository.UpcRepository
@@ -22,8 +23,10 @@ class ListDetailViewModel @Inject constructor(
     private lateinit var internalList: ShoppingList
     private val _shoppingList = MutableLiveData<ShoppingList>()
     val shoppingList: LiveData<ShoppingList> = _shoppingList
+
+    private var _recognizedBarcode = MutableLiveData<Barcode>()
     private var _recognizedProduct = MutableLiveData<Product>()
-    private var _barcodeNotFound = MutableLiveData<String>()
+    private var _productNotFound = MutableLiveData<String>()
     private var recognizerRunning = false
 
     fun setShoppingList(list: ShoppingList) {
@@ -31,11 +34,13 @@ class ListDetailViewModel @Inject constructor(
         _shoppingList.value = internalList
     }
 
+    fun getRecognizedBarcode(): LiveData<Barcode> = _recognizedBarcode
+
     fun getRecognizedProduct(): LiveData<Product> = _recognizedProduct
 
-    fun getBarcodeNotFound(): LiveData<String> = _barcodeNotFound
+    fun getProductNotFound(): LiveData<String> = _productNotFound
 
-    fun fetshNewestShoppingList() {
+    fun fetchNewestShoppingList() {
         viewModelScope.launch {
             internalList = shoppingListRepository.getList(internalList.name)
             refreshShoppingList()
@@ -84,7 +89,7 @@ class ListDetailViewModel @Inject constructor(
 
     fun resetBarcodeRecognition() {
         _recognizedProduct = MutableLiveData()
-        _barcodeNotFound = MutableLiveData()
+        _productNotFound = MutableLiveData()
     }
 
     fun recognizeBarcode(image: RecognitionImage) {
@@ -92,11 +97,12 @@ class ListDetailViewModel @Inject constructor(
         recognizerRunning = true
         viewModelScope.launch {
             val barcode = recognitionRepository.recognize(image)
-            if (barcode.isNotEmpty()) {
+            if (barcode != null) {
+                _recognizedBarcode.value = barcode
                 try {
-                    _recognizedProduct.value = upcRepository.getProduct(barcode)
+                    _recognizedProduct.value = upcRepository.getProduct(barcode.rawValue)
                 } catch (ex: BarcodeNotFoundException) {
-                    _barcodeNotFound.value = "Cannot recognize this product."
+                    _productNotFound.value = "Cannot recognize this product."
                 } finally {
                     recognizerRunning = false
                 }
