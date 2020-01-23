@@ -26,7 +26,7 @@ class MyListsViewModel @Inject constructor(
 
     fun loadShoppingLists() {
         viewModelScope.launch {
-            _shoppingLists.value = repository.getAllLists()
+            _shoppingLists.value = repository.getNotCompletedLists()
         }
     }
 
@@ -40,6 +40,7 @@ class MyListsViewModel @Inject constructor(
     fun deleteShoppingList(name: String) {
         viewModelScope.launch {
             repository.deleteList(name.toId())
+            loadShoppingLists()
         }
     }
 }

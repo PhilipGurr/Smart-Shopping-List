@@ -1,14 +1,13 @@
-package com.philipgurr.smartshoppinglist.ui
+package com.philipgurr.smartshoppinglist.ui.mylists
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.philipgurr.domain.ShoppingList
 import com.philipgurr.smartshoppinglist.databinding.ShoppinglistItemBinding
-import com.philipgurr.smartshoppinglist.ui.mylists.MyListsFragmentDirections
 import com.philipgurr.smartshoppinglist.ui.util.BaseListBindingAdapter
 
-class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistItemBinding>() {
+open class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistItemBinding>() {
     override var data = listOf<ShoppingList>()
 
     override fun createViewHolder(
@@ -21,7 +20,7 @@ class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistIt
         )
     }
 
-    class ShoppingListViewHolder(private val binding: ShoppinglistItemBinding) :
+    open class ShoppingListViewHolder(private val binding: ShoppinglistItemBinding) :
         ItemViewHolder<ShoppingList, ShoppinglistItemBinding>(binding) {
 
         override fun bind(item: ShoppingList) {
@@ -32,10 +31,10 @@ class ShoppingListsAdapter : BaseListBindingAdapter<ShoppingList, ShoppinglistIt
             }
         }
 
-        fun navigateToDetailScreen(shoppingList: ShoppingList) {
+        override fun navigateToDetailScreen(item: ShoppingList) {
             val actionDetail =
                 MyListsFragmentDirections.actionShoppingListDetail(
-                    shoppingList
+                    item
                 )
             Navigation.findNavController(binding.root).navigate(actionDetail)
         }

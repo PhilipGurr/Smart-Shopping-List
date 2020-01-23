@@ -35,5 +35,6 @@ abstract class BaseListBindingAdapter<T, B : ViewDataBinding>
         binding: B
     ) : RecyclerView.ViewHolder(binding.root) {
         abstract fun bind(item: T)
+        open fun navigateToDetailScreen(item: T) {}
     }
 }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.vm.CompletedListsViewModel
 import dagger.android.support.DaggerFragment
@@ -27,7 +26,7 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val shoppingListAdapter =
-        ShoppingListsAdapter()
+        CompletedListsAdapter()
     private lateinit var swipeToDeleteCallback: SwipeToDeleteCallback
 
     override fun onCreateView(
@@ -51,15 +50,6 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
 
         swipeRefreshCompletedLists.setOnRefreshListener(this)
 
-        // Load data only if nothing is loaded so far to avoid unnecessary API calls
-        // while navigating
-        if (viewModel.completedLists.value == null) {
-            swipeRefreshCompletedLists.post { onRefresh() }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.loadShoppingLists()
     }
 

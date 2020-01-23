@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.smartshoppinglist.R
-import com.philipgurr.smartshoppinglist.ui.ShoppingListsAdapter
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import dagger.android.support.DaggerFragment
@@ -58,19 +57,10 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
 
         swipeRefreshMyLists.setOnRefreshListener(this)
 
-        // Load data only if nothing is loaded so far to avoid unnecessary API calls
-        // while navigating
-        //if (viewModel.shoppingLists.value == null) {
-        //    swipeRefreshMyLists.post { onRefresh() }
-        //}
-
         fab_add_list.onClick {
             createNewShoppingList()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
         viewModel.loadShoppingLists()
     }
 

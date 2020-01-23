@@ -17,9 +17,7 @@ class CompletedListsViewModel @Inject constructor(
 
     fun loadShoppingLists() {
         viewModelScope.launch {
-            _completedLists.value = repository.getAllLists().filter { shoppingList ->
-                shoppingList.completedProducts().size == shoppingList.products.size
-            }
+            _completedLists.value = repository.getCompletedLists()
         }
     }
 
