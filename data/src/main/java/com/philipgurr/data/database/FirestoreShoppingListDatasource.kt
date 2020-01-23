@@ -52,8 +52,7 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
             .collection(PRODUCT_LISTS_COLLECTION_ID)
             .get().await()
             .parse<Product>()
-        products.sortByDescending { it.created }
-        return products
+        return products.sortedByDescending { it.created }.toMutableList()
     }
 
     override suspend fun getAll() = withContext(Dispatchers.IO) {

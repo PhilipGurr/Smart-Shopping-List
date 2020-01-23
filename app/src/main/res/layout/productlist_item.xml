@@ -20,8 +20,8 @@
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
-            android:text="@{product.name}"
-            android:textSize="30sp"
+            android:text="@{product.displayName()}"
+            android:textSize="20sp"
             android:textColor="@color/black" />
 
         <CheckBox

@@ -23,4 +23,5 @@
     <string name="login_textview">Log in with your Google Account to access your Shopping Lists on other devices too!</string>
     <string name="signout">Sign out</string>
     <string name="button_add">Add</string>
+    <string name="toggle_camera_flash">Toggle camera flash</string>
 </resources>

@@ -3,6 +3,8 @@ package com.philipgurr.smartshoppinglist.ui.addproduct
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Matrix
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import android.util.Size
 import android.view.LayoutInflater
@@ -18,10 +20,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
-import com.philipgurr.domain.RecognitionImage
+import com.philipgurr.domain.barcode.Barcode
+import com.philipgurr.domain.barcode.RecognitionImage
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentCameraBinding
-import com.philipgurr.smartshoppinglist.ui.util.OnNavigateBackListener
 import com.philipgurr.smartshoppinglist.util.extensions.YUV_420_888toNV21
 import com.philipgurr.smartshoppinglist.vm.ListDetailViewModel
 import dagger.android.support.DaggerFragment
@@ -39,23 +41,16 @@ class CameraFragment : DaggerFragment() {
         ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
     }
     private val imageAnalysisExecutor = Executors.newSingleThreadExecutor()
+    private lateinit var cameraPreview: Preview
     private var isResultViewUp = false
     private var isNotFoundViewUp = false
-    private lateinit var onNavigateBackListener: OnNavigateBackListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         parseArguments()
-        val binding: FragmentCameraBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_camera,
-            container,
-            false
-        )
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        val binding: FragmentCameraBinding = setupDataBinding(inflater, container)
         return binding.root
     }
 
@@ -66,31 +61,83 @@ class CameraFragment : DaggerFragment() {
         }
     }
 
+    private fun setupDataBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentCameraBinding {
+        val binding: FragmentCameraBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_camera,
+            container,
+            false
+        )
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        return binding
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewFinder.post { startCamera() }
+        setupClickListeners()
+
+        viewModel.resetBarcodeRecognition()
+        viewModel.getRecognizedBarcode().observe(this, Observer { barcode ->
+            val boundingBox = getTranslatedBoundingBoxFromBarcode(barcode)
+            if (rectOverlapsCenter(boundingBox)) {
+                viewModel.disableRecognizer()
+                barcode_frame.animateBarcodeFound()
+                viewModel.getProduct(barcode)
+            }
+        })
+        viewModel.getRecognizedProduct().observe(this, Observer { _ ->
+            // Parameter omitted because the product data is shown using data binding
+            if (noResultViewsVisible()) {
+                slideResultViewUp()
+            }
+        })
+        viewModel.getProductNotFound().observe(this, Observer { errorMessage ->
+            if (noResultViewsVisible()) {
+                productNotFound(errorMessage)
+            }
+        })
+    }
+
+    private fun setupClickListeners() {
         add_product.onClick {
             slideResultViewDown()
             viewModel.insertCurrentProduct()
+            viewModel.enableRecognizer()
         }
         viewFinder.onClick {
             if (isResultViewUp) {
                 slideResultViewDown()
+                viewModel.enableRecognizer()
             }
         }
-
-        viewModel.resetBarcodeRecognition()
-        viewModel.getRecognizedProduct().observe(this, Observer {
-            if (!isResultViewUp) {
-                slideResultViewUp()
+        flash_button.onClick {
+            if (flash_button.isSelected) {
+                flash_button.isSelected = false
+                cameraPreview.enableTorch(false)
+            } else {
+                flash_button.isSelected = true
+                cameraPreview.enableTorch(true)
             }
-        })
-        viewModel.getBarcodeNotFound().observe(this, Observer {
-            if (!isNotFoundViewUp) {
-                productNotFound(it)
-            }
-        })
+        }
     }
+
+    private fun getTranslatedBoundingBoxFromBarcode(barcode: Barcode): RectF {
+        val boundingBox = barcode.boundingBox
+        val boundingRect = with(boundingBox) {
+            Rect(left, top, right, bottom)
+        }
+        return barcode_frame.translateRect(boundingRect)
+    }
+
+    private fun rectOverlapsCenter(rect: RectF) =
+        rect.contains(viewFinder.width / 2f, viewFinder.height / 2f)
+
+    private fun noResultViewsVisible() = !isResultViewUp && !isNotFoundViewUp
 
     private fun startCamera() = runWithPermissions(Manifest.permission.CAMERA) {
         val viewFinderSize = Size(viewFinder.width, viewFinder.height)
@@ -98,34 +145,38 @@ class CameraFragment : DaggerFragment() {
             setTargetResolution(viewFinderSize)
         }.build()
 
-        val preview = Preview(previewConfig)
-        preview.setOnPreviewOutputUpdateListener {
+        cameraPreview = Preview(previewConfig)
+        cameraPreview.setOnPreviewOutputUpdateListener { previewOutput ->
             val parent = viewFinder.parent as ViewGroup
             parent.removeView(viewFinder)
             parent.addView(viewFinder, 0)
 
-            viewFinder.surfaceTexture = it.surfaceTexture
+            viewFinder.surfaceTexture = previewOutput.surfaceTexture
             compensateOrientationInViewFinder()
         }
 
-        CameraX.bindToLifecycle(this, setupImageAnalyser(), preview)
+        CameraX.bindToLifecycle(this, setupImageAnalyser(), cameraPreview)
     }
 
     private fun setupImageAnalyser(): ImageAnalysis {
         val config = ImageAnalysisConfig.Builder()
-            .setTargetResolution(Size(1280, 720))
+            .setTargetResolution(Size(1920, 1080))
             .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
             .build()
         val analysis = ImageAnalysis(config)
         analysis.setAnalyzer(
             imageAnalysisExecutor,
             ImageAnalysis.Analyzer { imageProxy: ImageProxy, rotationDegrees: Int ->
-                val recognitionImage = RecognitionImage(
-                    imageProxy.width,
-                    imageProxy.height,
-                    YUV_420_888toNV21(imageProxy),
-                    rotationDegrees
-                )
+                if (barcode_frame != null) {
+                    barcode_frame.setPreviewSize(imageProxy.width, imageProxy.height)
+                }
+                val recognitionImage =
+                    RecognitionImage(
+                        imageProxy.width,
+                        imageProxy.height,
+                        YUV_420_888toNV21(imageProxy),
+                        rotationDegrees
+                    )
                 viewModel.recognizeBarcode(recognitionImage)
             })
         return analysis
@@ -151,7 +202,7 @@ class CameraFragment : DaggerFragment() {
 
     private fun slideResultViewUp() {
         isResultViewUp = true
-        with(result_carde_view) {
+        with(result_card_view) {
             visibility = View.VISIBLE
             val animation = TranslateAnimation(0f, 0f, height.toFloat(), 0f)
             animation.duration = 300
@@ -162,7 +213,7 @@ class CameraFragment : DaggerFragment() {
 
     private fun slideResultViewDown() {
         isResultViewUp = false
-        with(result_carde_view) {
+        with(result_card_view) {
             visibility = View.VISIBLE
             val animation = TranslateAnimation(0f, 0f, 0f, height.toFloat())
             animation.duration = 300
@@ -185,7 +236,10 @@ class CameraFragment : DaggerFragment() {
         isNotFoundViewUp = true
         Snackbar.make(view!!, message, SNACKBAR_DURATION).show()
         view!!.postDelayed(
-            { isNotFoundViewUp = false },
+            {
+                isNotFoundViewUp = false
+                viewModel.enableRecognizer()
+            },
             SNACKBAR_DURATION.toLong()
         )
     }

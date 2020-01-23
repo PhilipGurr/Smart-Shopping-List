@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.data.api.BarcodeNotFoundException
 import com.philipgurr.domain.Product
-import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.domain.ShoppingList
 import com.philipgurr.domain.barcode.Barcode
+import com.philipgurr.domain.barcode.RecognitionImage
 import com.philipgurr.domain.repository.RecognitionRepository
 import com.philipgurr.domain.repository.ShoppingListRepository
 import com.philipgurr.domain.repository.UpcRepository
@@ -27,7 +27,6 @@ class ListDetailViewModel @Inject constructor(
     private var _recognizedBarcode = MutableLiveData<Barcode>()
     private var _recognizedProduct = MutableLiveData<Product>()
     private var _productNotFound = MutableLiveData<String>()
-    private var recognizerRunning = false
 
     fun setShoppingList(list: ShoppingList) {
         internalList = list
@@ -47,10 +46,18 @@ class ListDetailViewModel @Inject constructor(
         }
     }
 
+    private fun refreshShoppingList() {
+        _shoppingList.value = internalList
+    }
+
     fun toggleCompleted(product: Product) {
         viewModelScope.launch {
             internalList.products.remove(product)
-            val newProduct = Product(name = product.name, completed = !product.completed)
+            val newProduct = Product(
+                name = product.name,
+                completed = !product.completed,
+                created = product.created
+            )
             insertProduct(newProduct) // TODO: Create toggle method in repository for setting product as completed instead of using insert
         }
     }
@@ -75,10 +82,6 @@ class ListDetailViewModel @Inject constructor(
         }
     }
 
-    private fun refreshShoppingList() {
-        _shoppingList.value = internalList
-    }
-
     fun deleteProduct(product: Product) {
         viewModelScope.launch {
             internalList.products.remove(product)
@@ -92,22 +95,32 @@ class ListDetailViewModel @Inject constructor(
         _productNotFound = MutableLiveData()
     }
 
+    private var isRecognizerRunning = true
+
+    fun enableRecognizer() {
+        isRecognizerRunning = true
+    }
+
+    fun disableRecognizer() {
+        isRecognizerRunning = false
+    }
+
     fun recognizeBarcode(image: RecognitionImage) {
-        if (recognizerRunning) return
-        recognizerRunning = true
+        if (!isRecognizerRunning) return
         viewModelScope.launch {
             val barcode = recognitionRepository.recognize(image)
             if (barcode != null) {
                 _recognizedBarcode.value = barcode
-                try {
-                    _recognizedProduct.value = upcRepository.getProduct(barcode.rawValue)
-                } catch (ex: BarcodeNotFoundException) {
-                    _productNotFound.value = "Cannot recognize this product."
-                } finally {
-                    recognizerRunning = false
-                }
-            } else {
-                recognizerRunning = false
+            }
+        }
+    }
+
+    fun getProduct(barcode: Barcode) {
+        viewModelScope.launch {
+            try {
+                _recognizedProduct.value = upcRepository.getProduct(barcode.rawValue)
+            } catch (ex: BarcodeNotFoundException) {
+                _productNotFound.value = "Cannot recognize this product."
             }
         }
     }

@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.philipgurr.data.api.BarcodeNotFoundException
 import com.philipgurr.domain.Product
-import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.barcode.RecognitionImage
 import com.philipgurr.domain.repository.RecognitionRepository
 import com.philipgurr.domain.repository.ShoppingListRepository
 import com.philipgurr.domain.repository.UpcRepository

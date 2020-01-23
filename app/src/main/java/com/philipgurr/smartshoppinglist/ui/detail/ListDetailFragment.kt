@@ -34,7 +34,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     private val viewModel by lazy {
-        ViewModelProviders.of(this, factory).get(ListDetailViewModel::class.java)
+        ViewModelProviders.of(activity!!, factory).get(ListDetailViewModel::class.java)
     }
 
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -49,7 +49,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     ): View? {
         parseArguments()
         productListAdapter = ProductListAdapter(viewModel)
-        binding = setUpDataBinding(inflater, container)
+        binding = setupDataBinding(inflater, container)
         return binding.root
     }
 
@@ -60,7 +60,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         }
     }
 
-    private fun setUpDataBinding(
+    private fun setupDataBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentShoppingListDetailBinding {

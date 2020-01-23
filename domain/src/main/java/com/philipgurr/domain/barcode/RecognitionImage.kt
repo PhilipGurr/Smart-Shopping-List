@@ -1,4 +1,4 @@
-package com.philipgurr.domain
+package com.philipgurr.domain.barcode
 
 data class RecognitionImage(
     val width: Int,

@@ -10,5 +10,5 @@ class ShoppingList(
     var products: MutableList<Product> = mutableListOf()
 ) : Serializable {
     fun completedProducts() = products.filter { it.completed }
-    fun getSortedProducts() = products.apply { sortByDescending { it.created } }
+    fun getSortedProducts() = products.sortedByDescending { it.created }
 }

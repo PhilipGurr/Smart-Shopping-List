@@ -7,9 +7,9 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOption
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import com.philipgurr.data.util.await
-import com.philipgurr.domain.RecognitionImage
 import com.philipgurr.domain.barcode.Barcode
 import com.philipgurr.domain.barcode.BarcodeBoundingBox
+import com.philipgurr.domain.barcode.RecognitionImage
 import com.philipgurr.domain.repository.RecognitionRepository
 import javax.inject.Inject
 
@@ -30,9 +30,9 @@ class BarcodeRecognitionRepository @Inject constructor() : RecognitionRepository
 
         val firstBarcode = barcodes.firstOrNull() ?: return null
         val rawValue = firstBarcode.rawValue ?: return null
-        val boundingBox = firstBarcode.boundingBox?.toBarcodeBoundingBox() ?: return null
+        val boundingBox = firstBarcode.boundingBox ?: return null
 
-        return Barcode(rawValue, boundingBox)
+        return Barcode(rawValue, boundingBox.toBarcodeBoundingBox())
     }
 
     private fun degreesToFirebaseRotation(degrees: Int): Int = when (degrees) {
