@@ -18,14 +18,15 @@ class RepositoryTest {
     private val shoppingListDatasource: ShoppingListDatasource = mock()
     private val repository = StandardShoppingListRepository(shoppingListDatasource)
 
-    private val testProduct = Product("Banana", false)
+    private val now = Date()
+    private val testProduct = Product("Banana", now, false)
     private val testProduct2 =
-        Product("Strawberry Jam", true)
+        Product("Strawberry Jam", now, false)
     private val testShoppingList = ShoppingList(
         "testShoppingList",
         SHOPPING_LIST_NAME,
         Date(),
-        listOf(testProduct, testProduct2)
+        mutableListOf(testProduct, testProduct2)
     )
 
     @Test
