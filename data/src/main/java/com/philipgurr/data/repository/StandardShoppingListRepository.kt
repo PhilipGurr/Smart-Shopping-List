@@ -23,7 +23,7 @@ class StandardShoppingListRepository @Inject constructor(
     }
 
     override suspend fun getCompletedLists() = getAllLists().filter { shoppingList ->
-        shoppingList.completedProducts().size == shoppingList.products.size
+        shoppingList.products.size != 0 && shoppingList.completedProducts().size == shoppingList.products.size
     }
 
     override suspend fun addList(value: ShoppingList) {

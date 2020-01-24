@@ -2,9 +2,8 @@ package com.philipgurr.smartshoppinglist.ui.mylists
 
 import android.Manifest
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -46,6 +45,7 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         setupRecyclerView()
 
         viewModel.shoppingLists.observe(this, Observer { shoppingLists ->
@@ -105,5 +105,25 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
         }.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.search, menu)
+        val item = menu.findItem(R.id.action_search)
+
+        val searchView = item.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText == null) return true
+                viewModel.searchShoppingLists(newText)
+                return true
+            }
+        })
     }
 }
