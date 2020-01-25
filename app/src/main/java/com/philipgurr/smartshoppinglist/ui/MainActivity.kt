@@ -92,7 +92,6 @@ class MainActivity : AppCompatActivity() {
         loginButton.onClick {
             login()
         }
-        //navController.popBackStack()
     }
 
     private fun removeNavigationHeader() {
