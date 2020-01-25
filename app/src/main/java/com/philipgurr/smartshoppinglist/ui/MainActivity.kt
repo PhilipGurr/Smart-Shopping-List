@@ -16,11 +16,15 @@ import coil.api.load
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.marcoscg.licenser.Library
+import com.marcoscg.licenser.License
+import com.marcoscg.licenser.LicenserDialog
 import com.philipgurr.smartshoppinglist.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.android.synthetic.main.nav_header_not_logged_in.view.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
+
 
 const val RC_SIGN_IN = 1001
 
@@ -54,6 +58,9 @@ class MainActivity : AppCompatActivity() {
                             showUserNotLoggedIn()
                         }
                 }
+                R.id.nav_about -> {
+                    getLicenseDialog().show()
+                }
                 else -> navController.navigate(id)
             }
             true
@@ -63,6 +70,94 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.nav_shopping_lists), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun getLicenseDialog(): LicenserDialog {
+        return LicenserDialog(this)
+            .setTitle("Licenses")
+            .setCustomNoticeTitle("Notices for files:")
+            .setLibrary(
+                Library(
+                    "Android Support Libraries",
+                    "https://developer.android.com/topic/libraries/support-library/index.html",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Kotlin",
+                    "https://kotlinlang.org/",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Material Components",
+                    "https://material.io/components/",
+                    License.MIT
+                )
+            )
+            .setLibrary(
+                Library(
+                    "QuickPermissions Kotlin",
+                    "https://github.com/QuickPermissions/QuickPermissions-Kotlin",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Anko",
+                    "https://github.com/Kotlin/anko",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Mockito Kotlin",
+                    "https://github.com/nhaarman/mockito-kotlin",
+                    License.MIT
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Dagger",
+                    "https://github.com/google/dagger",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Firebase",
+                    "https://github.com/firebase/firebase-android-sdk",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Coil",
+                    "https://github.com/coil-kt/coil",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Retrofit",
+                    "https://github.com/square/retrofit",
+                    License.APACHE
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Licenser",
+                    "https://github.com/marcoscgdev/Licenser",
+                    License.MIT
+                )
+            )
+            .setPositiveButton(
+                android.R.string.ok
+            ) { dialogInterface, i ->
+                // TODO: 11/02/2018
+            }
     }
 
     private fun setupNavigationHeader() {
