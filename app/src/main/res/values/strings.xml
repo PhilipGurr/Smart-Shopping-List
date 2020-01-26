@@ -30,4 +30,5 @@
     <string name="dialog_new_list_hint">Enter name...</string>
     <string name="dialog_new_product">New Product</string>
     <string name="dialog_new_product_hint">Enter...</string>
+    <string name="dialog_new_product_positive_button"><![CDATA[Add & next]]></string>
 </resources>

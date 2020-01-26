@@ -151,7 +151,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
                 val name = editText { hint = context.getString(R.string.dialog_new_product_hint) }
                 name.requestFocus()
                 context!!.showKeyboard()
-                positiveButton("Add & next") {
+                positiveButton(getString(R.string.dialog_new_product_positive_button)) {
                     context!!.closeKeyboard()
                     val text = name.text.toString()
                     viewModel.insertProduct(text)
