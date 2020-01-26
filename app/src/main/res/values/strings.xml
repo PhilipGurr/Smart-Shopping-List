@@ -26,4 +26,8 @@
     <string name="toggle_camera_flash">Toggle camera flash</string>
     <string name="search">Search</string>
     <string name="about">About</string>
+    <string name="dialog_new_list">New List</string>
+    <string name="dialog_new_list_hint">Enter name...</string>
+    <string name="dialog_new_product">New Product</string>
+    <string name="dialog_new_product_hint">Enter...</string>
 </resources>

@@ -13,6 +13,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.ui.util.closeKeyboard
+import com.philipgurr.smartshoppinglist.ui.util.showKeyboard
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_my_lists.*
@@ -22,6 +24,7 @@ import org.jetbrains.anko.okButton
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
+
 
 class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     @Inject
@@ -96,13 +99,17 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun createNewShoppingList() {
-        alert("New List") {
+        alert(getString(R.string.dialog_new_list)) {
             customView {
-                val name = editText { hint = "Enter name..." }
+                val name = editText { hint = context.getString(R.string.dialog_new_list_hint) }
+                name.requestFocus()
+                context!!.showKeyboard()
                 okButton {
+                    context!!.closeKeyboard()
                     val text = name.text.toString()
                     viewModel.createShoppingList(text)
                 }
+                onCancelled { context!!.closeKeyboard() }
             }
         }.show()
     }

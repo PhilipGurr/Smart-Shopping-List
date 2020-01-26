@@ -51,7 +51,7 @@ class ArcProgress @JvmOverloads constructor(
     private val default_bottom_text_size: Float
     private val default_stroke_width: Float
     private val default_suffix_text: String
-    private val default_max = 100
+    private val default_max = 0
     private val default_arc_angle = 360 * 0.8f
     private var default_text_size: Float
     private val min_size: Float

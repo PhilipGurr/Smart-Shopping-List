@@ -16,6 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.ui.util.closeKeyboard
+import com.philipgurr.smartshoppinglist.ui.util.showKeyboard
 import com.philipgurr.smartshoppinglist.util.extensions.initFab
 import com.philipgurr.smartshoppinglist.util.extensions.rotateFab
 import com.philipgurr.smartshoppinglist.util.extensions.showFabIn
@@ -25,7 +27,6 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_shopping_list_detail.*
 import org.jetbrains.anko.customView
 import org.jetbrains.anko.editText
-import org.jetbrains.anko.okButton
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.alert
 import javax.inject.Inject
@@ -145,13 +146,18 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
     }
 
     private fun addProductByText() {
-        alert("New Product") {
+        alert(getString(R.string.dialog_new_product)) {
             customView {
-                val name = editText { hint = "Enter..." }
-                okButton {
+                val name = editText { hint = context.getString(R.string.dialog_new_product_hint) }
+                name.requestFocus()
+                context!!.showKeyboard()
+                positiveButton("Add & next") {
+                    context!!.closeKeyboard()
                     val text = name.text.toString()
                     viewModel.insertProduct(text)
+                    addProductByText()
                 }
+                onCancelled { context!!.closeKeyboard() }
             }
         }.show()
     }
