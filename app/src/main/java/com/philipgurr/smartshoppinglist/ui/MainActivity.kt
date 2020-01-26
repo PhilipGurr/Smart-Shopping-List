@@ -52,17 +52,14 @@ class MainActivity : AppCompatActivity() {
         nav_view.setNavigationItemSelectedListener { item ->
             when (val id = item.itemId) {
                 R.id.nav_signout -> {
-                    AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener {
-                            showUserNotLoggedIn()
-                        }
+                    signOut()
                 }
                 R.id.nav_about -> {
                     getLicenseDialog().show()
                 }
                 else -> navController.navigate(id)
             }
+            //drawerLayout.closeDrawers()
             true
         }
 
@@ -70,6 +67,17 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.nav_shopping_lists), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun signOut() {
+        AuthUI.getInstance()
+            .signOut(this)
+            .addOnCompleteListener {
+                showUserNotLoggedIn()
+            }
+        nav_view.menu.add(R.id.nav_signout)
+
+        nav_view.menu.findItem(R.id.nav_signout).isVisible = false
     }
 
     private fun getLicenseDialog(): LicenserDialog {
@@ -164,8 +172,10 @@ class MainActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
             showUserDetails(user)
+            nav_view.menu.findItem(R.id.nav_signout).isVisible = true
         } else {
             showUserNotLoggedIn()
+            nav_view.menu.findItem(R.id.nav_signout).isVisible = false
         }
     }
 
