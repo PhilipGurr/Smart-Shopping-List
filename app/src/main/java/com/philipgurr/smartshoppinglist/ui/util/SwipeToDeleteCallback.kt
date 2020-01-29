@@ -16,6 +16,8 @@ class SwipeToDeleteCallback(
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     private val background = ColorDrawable(Color.parseColor(BACKGROUND_COLOR))
     private val icon = context.getDrawable(R.drawable.ic_delete)!!
+    var isSwiping = false
+        private set
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -34,6 +36,8 @@ class SwipeToDeleteCallback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
+        isSwiping = true
+
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
 
@@ -61,5 +65,6 @@ class SwipeToDeleteCallback(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         swipeCallback(viewHolder)
+        isSwiping = false
     }
 }

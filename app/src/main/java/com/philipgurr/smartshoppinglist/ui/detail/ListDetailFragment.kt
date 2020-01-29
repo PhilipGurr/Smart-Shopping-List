@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.ui.util.ToggleFabOnScroll
 import com.philipgurr.smartshoppinglist.ui.util.closeKeyboard
 import com.philipgurr.smartshoppinglist.ui.util.showKeyboard
 import com.philipgurr.smartshoppinglist.util.extensions.initFab
@@ -89,21 +90,22 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         })
 
         swipeRefreshDetail.setOnRefreshListener(this)
+
+        // To prevent updating the products while the user is deleting an item
+        swipeRefreshDetail.setOnChildScrollUpCallback { _, _ ->
+            swipeToDeleteCallback.isSwiping
+        }
     }
 
     private fun setupRecyclerView() {
+        swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
+            val position = viewHolder.adapterPosition
+            deleteProduct(position)
+        }
         linearLayoutManager = LinearLayoutManager(context)
         with(productListRecyclerView) {
             layoutManager = linearLayoutManager
             adapter = productListAdapter
-
-            swipeToDeleteCallback =
-                SwipeToDeleteCallback(
-                    context!!
-                ) { viewHolder ->
-                    val position = viewHolder.adapterPosition
-                    deleteProduct(position)
-                }
             ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
         }
     }
@@ -131,6 +133,8 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
             addProductByBarcode()
             animateAddProductFabs()
         }
+
+        productListRecyclerView.addOnScrollListener(ToggleFabOnScroll(fab_add_product))
     }
 
     private fun animateAddProductFabs() {

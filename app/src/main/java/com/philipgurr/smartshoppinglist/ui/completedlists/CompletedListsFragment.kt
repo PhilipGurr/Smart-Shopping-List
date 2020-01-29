@@ -50,22 +50,22 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
 
         swipeRefreshCompletedLists.setOnRefreshListener(this)
 
+        // To prevent updating the lists while the user is deleting an item
+        swipeRefreshCompletedLists.setOnChildScrollUpCallback { _, _ ->
+            swipeToDeleteCallback.isSwiping
+        }
         viewModel.loadShoppingLists()
     }
 
     private fun setupRecyclerView() {
+        swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
+            val position = viewHolder.adapterPosition
+            deleteList(position)
+        }
         linearLayoutManager = LinearLayoutManager(context)
         with(completedListsRecyclerView) {
             layoutManager = linearLayoutManager
             adapter = shoppingListAdapter
-
-            swipeToDeleteCallback =
-                SwipeToDeleteCallback(
-                    context!!
-                ) { viewHolder ->
-                    val position = viewHolder.adapterPosition
-                    deleteList(position)
-                }
             ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
         }
     }

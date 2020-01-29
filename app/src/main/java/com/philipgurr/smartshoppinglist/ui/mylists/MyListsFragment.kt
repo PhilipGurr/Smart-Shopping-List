@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
+import com.philipgurr.smartshoppinglist.ui.util.ToggleFabOnScroll
 import com.philipgurr.smartshoppinglist.ui.util.closeKeyboard
 import com.philipgurr.smartshoppinglist.ui.util.showKeyboard
 import com.philipgurr.smartshoppinglist.vm.MyListsViewModel
@@ -60,6 +61,11 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
 
         swipeRefreshMyLists.setOnRefreshListener(this)
 
+        // To prevent updating the lists while the user is deleting an item
+        swipeRefreshMyLists.setOnChildScrollUpCallback { _, _ ->
+            swipeToDeleteCallback.isSwiping
+        }
+
         fab_add_list.onClick {
             createNewShoppingList()
         }
@@ -68,19 +74,17 @@ class MyListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setupRecyclerView() {
+        swipeToDeleteCallback = SwipeToDeleteCallback(context!!) { viewHolder ->
+            val position = viewHolder.adapterPosition
+            deleteList(position)
+        }
         linearLayoutManager = LinearLayoutManager(context)
         with(myListsRecyclerView) {
             layoutManager = linearLayoutManager
             adapter = shoppingListAdapter
 
-            swipeToDeleteCallback =
-                SwipeToDeleteCallback(
-                    context!!
-                ) { viewHolder ->
-                    val position = viewHolder.adapterPosition
-                    deleteList(position)
-                }
             ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
+            addOnScrollListener(ToggleFabOnScroll(fab_add_list))
         }
     }
 
