@@ -7,3 +7,4 @@ fun String.toId(): String {
 }
 
 fun ShoppingList.completedProducts() = products.filter { it.completed }
+fun ShoppingList.getSortedProducts() = products.sortedByDescending { it.created }

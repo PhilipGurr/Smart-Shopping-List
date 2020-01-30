@@ -23,11 +23,11 @@ class FirebaseCloudShoppingListDatasource @Inject constructor(
 
     init {
         userManager.addOnUserChangedListener { uid ->
-            getShoppingListCollectionForCurrentUser(uid)
+            getShoppingListCollectionForUser(uid)
         }
     }
 
-    private fun getShoppingListCollectionForCurrentUser(uid: String) {
+    private fun getShoppingListCollectionForUser(uid: String) {
         shoppingListCollection = database
             .collection(USER_LISTS_COLLECTION_ID)
             .document(uid)

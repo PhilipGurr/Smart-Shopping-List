@@ -83,24 +83,36 @@ class CameraFragment : DaggerFragment() {
 
         viewModel.resetBarcodeRecognition()
         viewModel.getRecognizedBarcode().observe(this, Observer { barcode ->
-            val boundingBox = getTranslatedBoundingBoxFromBarcode(barcode)
-            if (rectOverlapsCenter(boundingBox)) {
-                viewModel.disableRecognizer()
-                barcode_frame.animateBarcodeFound()
-                viewModel.getProduct(barcode)
-            }
+            handleBarcodeRecognized(barcode)
         })
         viewModel.getRecognizedProduct().observe(this, Observer { _ ->
             // Parameter omitted because the product data is shown using data binding
-            if (noResultViewsVisible()) {
-                slideResultViewUp()
-            }
+            handleProductRecognized()
         })
         viewModel.getProductNotFound().observe(this, Observer { errorMessage ->
-            if (noResultViewsVisible()) {
-                productNotFound(errorMessage)
-            }
+            handleProductNotFound(errorMessage)
         })
+    }
+
+    private fun handleBarcodeRecognized(barcode: Barcode) {
+        val boundingBox = getTranslatedBoundingBoxFromBarcode(barcode)
+        if (isRectOverlappingCenter(boundingBox)) {
+            viewModel.disableRecognizer()
+            barcode_frame.animateBarcodeFound()
+            viewModel.getProduct(barcode)
+        }
+    }
+
+    private fun handleProductRecognized() {
+        if (noResultViewsVisible()) {
+            slideResultViewUp()
+        }
+    }
+
+    private fun handleProductNotFound(errorMessage: String) {
+        if (noResultViewsVisible()) {
+            productNotFound(errorMessage)
+        }
     }
 
     private fun setupClickListeners() {
@@ -116,13 +128,17 @@ class CameraFragment : DaggerFragment() {
             }
         }
         flash_button.onClick {
-            if (flash_button.isSelected) {
-                flash_button.isSelected = false
-                cameraPreview.enableTorch(false)
-            } else {
-                flash_button.isSelected = true
-                cameraPreview.enableTorch(true)
-            }
+            toggleFlash()
+        }
+    }
+
+    private fun toggleFlash() {
+        if (flash_button.isSelected) {
+            flash_button.isSelected = false
+            cameraPreview.enableTorch(false)
+        } else {
+            flash_button.isSelected = true
+            cameraPreview.enableTorch(true)
         }
     }
 
@@ -134,12 +150,17 @@ class CameraFragment : DaggerFragment() {
         return barcode_frame.translateRect(boundingRect)
     }
 
-    private fun rectOverlapsCenter(rect: RectF) =
+    private fun isRectOverlappingCenter(rect: RectF) =
         rect.contains(viewFinder.width / 2f, viewFinder.height / 2f)
 
     private fun noResultViewsVisible() = !isResultViewUp && !isNotFoundViewUp
 
     private fun startCamera() = runWithPermissions(Manifest.permission.CAMERA) {
+        setupPreview()
+        CameraX.bindToLifecycle(this, setupImageAnalyzer(), cameraPreview)
+    }
+
+    private fun setupPreview() {
         val viewFinderSize = Size(viewFinder.width, viewFinder.height)
         val previewConfig = PreviewConfig.Builder().apply {
             setTargetResolution(viewFinderSize)
@@ -154,11 +175,27 @@ class CameraFragment : DaggerFragment() {
             viewFinder.surfaceTexture = previewOutput.surfaceTexture
             compensateOrientationInViewFinder()
         }
-
-        CameraX.bindToLifecycle(this, setupImageAnalyser(), cameraPreview)
     }
 
-    private fun setupImageAnalyser(): ImageAnalysis {
+    private fun compensateOrientationInViewFinder() {
+        val matrix = Matrix()
+
+        val centerX = viewFinder.width / 2f
+        val centerY = viewFinder.height / 2f
+
+        val rotationDegrees = when (viewFinder.display.rotation) {
+            Surface.ROTATION_0 -> 0
+            Surface.ROTATION_90 -> 90
+            Surface.ROTATION_180 -> 180
+            Surface.ROTATION_270 -> 270
+            else -> return
+        }
+        matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
+
+        viewFinder.setTransform(matrix)
+    }
+
+    private fun setupImageAnalyzer(): ImageAnalysis {
         val config = ImageAnalysisConfig.Builder()
             .setTargetResolution(Size(1920, 1080))
             .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
@@ -180,24 +217,6 @@ class CameraFragment : DaggerFragment() {
                 viewModel.recognizeBarcode(recognitionImage)
             })
         return analysis
-    }
-
-    private fun compensateOrientationInViewFinder() {
-        val matrix = Matrix()
-
-        val centerX = viewFinder.width / 2f
-        val centerY = viewFinder.height / 2f
-
-        val rotationDegrees = when (viewFinder.display.rotation) {
-            Surface.ROTATION_0 -> 0
-            Surface.ROTATION_90 -> 90
-            Surface.ROTATION_180 -> 180
-            Surface.ROTATION_270 -> 270
-            else -> return
-        }
-        matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
-
-        viewFinder.setTransform(matrix)
     }
 
     private fun slideResultViewUp() {

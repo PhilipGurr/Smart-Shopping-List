@@ -89,16 +89,18 @@ class CompletedListsFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshLis
         val item = menu.findItem(R.id.action_search)
 
         val searchView = item.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+        searchView.setOnQueryTextListener(SearchTextListener())
+    }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText == null) return true
-                viewModel.searchShoppingLists(newText)
-                return true
-            }
-        })
+    private inner class SearchTextListener : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            return false
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            if (newText == null) return true
+            viewModel.searchShoppingLists(newText)
+            return true
+        }
     }
 }

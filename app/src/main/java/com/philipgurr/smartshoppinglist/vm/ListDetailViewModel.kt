@@ -58,7 +58,7 @@ class ListDetailViewModel @Inject constructor(
                 completed = !product.completed,
                 created = product.created
             )
-            insertProduct(newProduct) // TODO: Create toggle method in repository for setting product as completed instead of using insert
+            insertProduct(newProduct)
         }
     }
 

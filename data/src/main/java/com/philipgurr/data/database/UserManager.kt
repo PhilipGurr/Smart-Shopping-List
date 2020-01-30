@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 private const val USER_KEY = "user_uid"
 private const val LOCAL_USER_KEY = "local_user"
+private val RANGE_FOR_RANDOM_GENERATION = 0 until 10
 
 typealias AuthListener = (uid: String) -> Unit
 
@@ -58,10 +59,9 @@ class UserManager @Inject constructor(
     }
 
     private fun generateRandomUid(): String {
-        val range = 0 until 10
         return buildString {
             for (digit in (0 until 12)) {
-                append(range.random())
+                append(RANGE_FOR_RANDOM_GENERATION.random())
             }
         }
     }

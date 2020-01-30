@@ -2,6 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="com.philipgurr.domain.util.ShoppingListExtKt" />
+
         <variable
             name="shoppingList"
             type="com.philipgurr.domain.ShoppingList" />
@@ -36,7 +39,7 @@
                 android:id="@+id/shoppingListProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{@string/progress(shoppingList.completedProducts().size(), shoppingList.products.size())}"
+                android:text="@{@string/progress(ShoppingListExtKt.completedProducts(shoppingList).size(), shoppingList.products.size())}"
                 android:textSize="30sp"
                 android:textColor="@color/gray"
                 android:gravity="end"/>
@@ -50,7 +53,7 @@
             android:indeterminate="false"
             android:progressBackgroundTint="@color/colorPrimaryDark"
             android:max="@{shoppingList.products.size()}"
-            android:progress="@{shoppingList.completedProducts().size()}"
+            android:progress="@{ShoppingListExtKt.completedProducts(shoppingList).size()}"
             android:progressTint="@color/colorPrimaryDark"
             />
     </LinearLayout>

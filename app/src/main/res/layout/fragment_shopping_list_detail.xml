@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="com.philipgurr.domain.util.ShoppingListExtKt" />
+
         <variable
             name="viewModel"
             type="com.philipgurr.smartshoppinglist.vm.ListDetailViewModel" />
@@ -47,7 +50,7 @@
                     app:arc_text_color="@color/colorAccent"
                     app:arc_unfinished_color="@color/colorPrimaryDark"
                     app:max="@{viewModel.shoppingList.products.size}"
-                    app:progress="@{viewModel.shoppingList.completedProducts().size}" />
+                    app:progress="@{ShoppingListExtKt.completedProducts(viewModel.shoppingList).size}" />
             </LinearLayout>
 
             <FrameLayout

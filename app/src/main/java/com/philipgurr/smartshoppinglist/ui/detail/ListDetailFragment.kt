@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.philipgurr.domain.ShoppingList
+import com.philipgurr.domain.util.getSortedProducts
 import com.philipgurr.smartshoppinglist.R
 import com.philipgurr.smartshoppinglist.databinding.FragmentShoppingListDetailBinding
 import com.philipgurr.smartshoppinglist.ui.util.SwipeToDeleteCallback
@@ -83,10 +85,7 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         setupFabs()
 
         viewModel.shoppingList.observe(this, Observer { list ->
-            productListAdapter.data = list.getSortedProducts()
-            productListAdapter.notifyDataSetChanged()
-
-            swipeRefreshDetail.isRefreshing = false
+            handleUpdatedShoppingList(list)
         })
 
         swipeRefreshDetail.setOnRefreshListener(this)
@@ -95,6 +94,13 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         swipeRefreshDetail.setOnChildScrollUpCallback { _, _ ->
             swipeToDeleteCallback.isSwiping
         }
+    }
+
+    private fun handleUpdatedShoppingList(list: ShoppingList) {
+        productListAdapter.data = list.getSortedProducts()
+        productListAdapter.notifyDataSetChanged()
+
+        swipeRefreshDetail.isRefreshing = false
     }
 
     private fun setupRecyclerView() {
@@ -108,13 +114,6 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
             adapter = productListAdapter
             ItemTouchHelper(swipeToDeleteCallback).attachToRecyclerView(this)
         }
-    }
-
-    private fun deleteProduct(position: Int) {
-        val productToDelete = productListAdapter.data[position]
-        productListAdapter.removeItem(position)
-        productListAdapter.notifyItemRemoved(position)
-        viewModel.deleteProduct(productToDelete)
     }
 
     private fun setupFabs() {
@@ -135,6 +134,11 @@ class ListDetailFragment : DaggerFragment(), SwipeRefreshLayout.OnRefreshListene
         }
 
         productListRecyclerView.addOnScrollListener(ToggleFabOnScroll(fab_add_product))
+    }
+
+    private fun deleteProduct(position: Int) {
+        val productToDelete = productListAdapter.data[position]
+        viewModel.deleteProduct(productToDelete)
     }
 
     private fun animateAddProductFabs() {
