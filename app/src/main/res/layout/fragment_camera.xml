@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <import type="com.philipgurr.domain.util.ProductExtKt" />
 
         <variable
@@ -61,7 +60,7 @@
                 android:layout_gravity="center|start"
                 android:layout_marginStart="15sp"
                 android:maxLength="30"
-                android:text="@{ProductExtKt.displayName(viewModel.recognizedProduct)}"
+                android:text="@{ProductExtKt.displayName(viewModel.getRecognizedProduct())}"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
