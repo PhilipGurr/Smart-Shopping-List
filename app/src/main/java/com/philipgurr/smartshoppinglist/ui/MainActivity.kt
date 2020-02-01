@@ -15,10 +15,12 @@ import coil.api.load
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.marcoscg.licenser.Library
-import com.marcoscg.licenser.License
-import com.marcoscg.licenser.LicenserDialog
 import com.philipgurr.smartshoppinglist.R
+import de.psdev.licensesdialog.LicensesDialog
+import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20
+import de.psdev.licensesdialog.licenses.MITLicense
+import de.psdev.licensesdialog.model.Notice
+import de.psdev.licensesdialog.model.Notices
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.android.synthetic.main.nav_header_not_logged_in.view.*
@@ -52,9 +54,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_signout -> {
                     signOut()
                 }
-                R.id.nav_about -> {
-                    getLicenseDialog().show()
-                }
                 else -> navController.navigate(id)
             }
             drawerLayout.closeDrawers()
@@ -65,6 +64,9 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.nav_shopping_lists), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+        about_button.onClick {
+            getLicenseDialog().show()
+        }
     }
 
     private fun signOut() {
@@ -144,89 +146,108 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun getLicenseDialog(): LicenserDialog {
-        return LicenserDialog(this)
-            .setTitle("Licenses")
-            .setCustomNoticeTitle("Notices for files:")
-            .setLibrary(
-                Library(
+    private fun getLicenseDialog(): LicensesDialog {
+        val notices = Notices()
+        with(notices) {
+            addNotice(
+                Notice(
                     "Android Support Libraries",
                     "https://developer.android.com/topic/libraries/support-library/index.html",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Kotlin",
                     "https://kotlinlang.org/",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Material Components",
                     "https://material.io/components/",
-                    License.MIT
+                    "",
+                    MITLicense()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "QuickPermissions Kotlin",
                     "https://github.com/QuickPermissions/QuickPermissions-Kotlin",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Anko",
                     "https://github.com/Kotlin/anko",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Mockito Kotlin",
                     "https://github.com/nhaarman/mockito-kotlin",
-                    License.MIT
+                    "",
+                    MITLicense()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Dagger",
                     "https://github.com/google/dagger",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Firebase",
                     "https://github.com/firebase/firebase-android-sdk",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Coil",
                     "https://github.com/coil-kt/coil",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
+            addNotice(
+                Notice(
                     "Retrofit",
                     "https://github.com/square/retrofit",
-                    License.APACHE
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setLibrary(
-                Library(
-                    "Licenser",
-                    "https://github.com/marcoscgdev/Licenser",
-                    License.MIT
+            addNotice(
+                Notice(
+                    "LicensesDialog",
+                    "http://psdev.de",
+                    "",
+                    ApacheSoftwareLicense20()
                 )
             )
-            .setPositiveButton(
-                android.R.string.ok
-            ) { _, _ -> }
+            addNotice(
+                Notice(
+                    "Coil",
+                    "https://github.com/coil-kt/coil",
+                    "",
+                    ApacheSoftwareLicense20()
+                )
+            )
+        }
+        return LicensesDialog.Builder(this)
+            .setNotices(notices)
+            .build()
     }
 }
