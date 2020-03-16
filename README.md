@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/PhilipGurr/Smart-Shopping-List/tree/master.svg?style=svg)](https://circleci.com/gh/PhilipGurr/Smart-Shopping-List/tree/master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f058b0f266547e591176ab41120b4f2)](https://www.codacy.com/manual/PhilipGurr/Smart-Shopping-List?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PhilipGurr/Smart-Shopping-List&amp;utm_campaign=Badge_Grade)
 
-This app allows the user to create shopping lists and keep track of the products he needs to buy or wants to save for later acccess.
+This app allows the user to create shopping lists and keep track of the products he needs to buy or wants to save for later access.
 Products can be added by text or scanning the barcode of the product with the device camera. It provides an overview of how many products
 the user collected already and which ones are yet to tick off. By signing in with a Google account, shopping lists can be accessed on other 
 devices too.
